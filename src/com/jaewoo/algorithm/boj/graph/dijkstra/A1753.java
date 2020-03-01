@@ -63,7 +63,6 @@ public class A1753 {
         pq.offer(new Edge(start, 0));
         dist[start] = 0;
 
-        Edge ce;
         int now, next;
         while(!pq.isEmpty()) {
             now = pq.poll().getEnd();
