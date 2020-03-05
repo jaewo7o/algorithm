@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.mst;
+package com.jaewoo.algorithm.boj.mst;
 
 import java.io.*;
 import java.util.*;

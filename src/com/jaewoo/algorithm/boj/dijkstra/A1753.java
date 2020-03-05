@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.dijkstra;
+package com.jaewoo.algorithm.boj.dijkstra;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

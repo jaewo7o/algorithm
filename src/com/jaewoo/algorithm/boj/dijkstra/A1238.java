@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.dijkstra;
+package com.jaewoo.algorithm.boj.dijkstra;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-public class A1504 {
-    static int N;
-    static int E;
+public class A1238 {
 
-    static final int INF = 100000;
+    static int N;
+    static int M;
+    static int X;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,63 +18,56 @@ public class A1504 {
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
-        E = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        X = Integer.parseInt(st.nextToken());
 
+        int [] dist = new int[N + 1];
+        int [] revDist = new int[N + 1];
         List<Edge>[] linkEdges = new ArrayList[N + 1];
+        List<Edge>[] revLinkEdges = new ArrayList[N + 1];
         for (int i=1; i<=N; i++) {
+            dist[i] = Integer.MAX_VALUE;
+            revDist[i] = Integer.MAX_VALUE;
             linkEdges[i] = new ArrayList<>();
+            revLinkEdges[i] = new ArrayList<>();
         }
 
         int s, e, w;
-        for (int i=1; i<=E; i++) {
+        for (int i=1; i<=M; i++) {
             st = new StringTokenizer(br.readLine());
             s = Integer.parseInt(st.nextToken());
             e = Integer.parseInt(st.nextToken());
             w = Integer.parseInt(st.nextToken());
 
             linkEdges[s].add(new Edge(e, w));
-            linkEdges[e].add(new Edge(s, w));
+            revLinkEdges[e].add(new Edge(s, w));
         }
 
-        int pass1, pass2;
-        st = new StringTokenizer(br.readLine());
-        pass1 = Integer.parseInt(st.nextToken());
-        pass2 = Integer.parseInt(st.nextToken());
+        dijkstra(linkEdges, dist, X);
+        dijkstra(revLinkEdges, revDist, X);
 
-        int dist1, dist2;
-        dist1 = dijkstra(linkEdges, 1, pass1);
-        dist1 += dijkstra(linkEdges, pass1, pass2);
-        dist1 += dijkstra(linkEdges, pass2, N);
-
-        dist2 = dijkstra(linkEdges, 1, pass2);
-        dist2 += dijkstra(linkEdges, pass2, pass1);
-        dist2 += dijkstra(linkEdges, pass1, N);
-
-        if (dist1 >= INF && dist2 >= INF) {
-            bw.write("-1\n");
-        } else {
-            bw.write(Math.min(dist1, dist2) + "\n");
+        int maxDist = 0;
+        for (int i=1; i<=N; i++) {
+            maxDist = Math.max(maxDist, dist[i] + revDist[i]);
         }
+
+        bw.write(maxDist + "\n");
 
         bw.flush();
         bw.close();
     }
 
-    private static int dijkstra(List<Edge>[] linkEdges, int start, int end) {
-        int[] dist = new int[N + 1];
+    private static void dijkstra(List<Edge>[] linkEdges, int[] dist, int start) {
         boolean[] visit = new boolean[N + 1];
-
-        for (int i=1; i<=N; i++) {
-            dist[i] = INF;
-        }
 
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(start, 0));
         dist[start] = 0;
 
         int now, next;
-        while(!pq.isEmpty()) {
+        while (!pq.isEmpty()) {
             now = pq.poll().end;
+
             if (visit[now]) {
                 continue;
             }
@@ -88,8 +81,6 @@ public class A1504 {
                 }
             }
         }
-
-        return dist[end];
     }
 
     private static class Edge implements Comparable<Edge> {
@@ -108,13 +99,15 @@ public class A1504 {
     }
 }
 
+
 /* INPUT
-4 6
-1 2 3
-2 3 3
-3 4 1
-1 3 5
-2 4 5
-1 4 4
-2 3
- */
+4 8 2
+1 2 4
+1 3 2
+1 4 7
+2 1 1
+2 3 5
+3 1 2
+3 4 4
+4 2 3
+*/
