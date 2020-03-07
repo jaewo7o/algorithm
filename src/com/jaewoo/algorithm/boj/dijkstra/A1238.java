@@ -8,6 +8,10 @@ import java.util.StringTokenizer;
 
 public class A1238 {
 
+    /**
+     * Floyd_warshall or dijkstra로 문제 풀이 가능
+     */
+
     static int N;
     static int M;
     static int X;
