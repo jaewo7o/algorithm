@@ -3,9 +3,7 @@ package com.jaewoo.algorithm.boj.bellman_ford;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class A1865 {
     static int T;
@@ -29,7 +27,6 @@ public class A1865 {
             dist = new int[N + 1];
             links = new List[N + 1];
             for (int i=1; i<=N; i++) {
-                dist[i] = Integer.MAX_VALUE;
                 links[i] = new ArrayList<>();
             }
 
@@ -47,33 +44,80 @@ public class A1865 {
                 }
             }
 
-            dist[1] = 0;
-            for (int i=1; i<N; i++) {
-                for (int j=1; j<=N; j++) {
-                    for (Link e : links[j]) {
-                        if (dist[j] != Integer.MAX_VALUE && dist[e.v] > dist[j] + e.w) {
-                            dist[e.v] = dist[j] + e.w;
-                        }
-                    }
-                }
-            }
+            System.out.println("Bellman Ford Output");
+            boolean cycle = bellmanFord(1);
+            printResult(cycle);
 
-            boolean cycle = false;
+            System.out.println("SPFA Output");
+            cycle = spfa(1);
+            printResult(cycle);
+        }
+    }
+
+
+
+    private static void printResult(boolean cycle) {
+        if (cycle) {
+            System.out.println("YES");
+        } else {
+            System.out.println("NO");
+        }
+    }
+
+    public static boolean bellmanFord(int start) {
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[start] = 0;
+        for (int i=1; i<N; i++) {
             for (int j=1; j<=N; j++) {
                 for (Link e : links[j]) {
                     if (dist[j] != Integer.MAX_VALUE && dist[e.v] > dist[j] + e.w) {
-                        cycle = true;
-                        break;
+                        dist[e.v] = dist[j] + e.w;
                     }
                 }
             }
+        }
 
-            if (cycle) {
-                System.out.println("YES");
-            } else {
-                System.out.println("NO");
+        for (int j=1; j<=N; j++) {
+            for (Link e : links[j]) {
+                if (dist[j] != Integer.MAX_VALUE && dist[e.v] > dist[j] + e.w) {
+                    return true;
+                }
             }
         }
+
+        return false;
+    }
+
+    private static boolean spfa(int start) {
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[start] = 0;
+
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(start);
+
+        int[] cycle = new int[N + 1];
+        cycle[start]++;
+
+        while (!q.isEmpty()) {
+            int now = q.poll();
+
+            for (Link link : links[now]) {
+                int next = link.v;
+                int nextCost = dist[now] + link.w;
+
+                if (dist[next] > nextCost) {
+                    dist[next] = nextCost;
+
+                    if (++cycle[next] >= N) {
+                        return true;
+                    }
+
+                    q.offer(next);
+                }
+            }
+        }
+
+        return false;
     }
 
     private static class Link {
