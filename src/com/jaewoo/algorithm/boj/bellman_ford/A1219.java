@@ -3,8 +3,7 @@ package com.jaewoo.algorithm.boj.bellman_ford;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class A1219 {
 
@@ -15,6 +14,7 @@ public class A1219 {
 
     static int[] dist;
     static Edge[] edges;
+    static List<Edge>[] linkEdges;
     static int[] earns;
 
     public static void main(String[] args) throws IOException {
@@ -28,9 +28,13 @@ public class A1219 {
 
         dist = new int[N];
         earns = new int[N];
+
+        linkEdges = new List[N];
         edges = new Edge[M];
 
-        Arrays.fill(dist, Integer.MIN_VALUE);
+        for (int i=0; i<N; i++) {
+            linkEdges[i] = new ArrayList<>();
+        }
 
         for (int i=0, u, v, w; i<M; i++) {
             st = new StringTokenizer(br.readLine());
@@ -39,13 +43,70 @@ public class A1219 {
             v = Integer.parseInt(st.nextToken());
             w = Integer.parseInt(st.nextToken());
 
-            edges[i] = new Edge(u, v, -w);
+            Edge edge = new Edge(u, v, -w);
+            edges[i] = edge;
+            linkEdges[u].add(edge);
         }
 
         st = new StringTokenizer(br.readLine());
         for (int i=0; i<N; i++) {
             earns[i] = Integer.parseInt(st.nextToken());
         }
+
+        long start = System.currentTimeMillis();
+        System.out.println("BellmanFord Output ===> ");
+        bellmanFord();
+        printResult();
+        long end = System.currentTimeMillis();
+        System.out.println("BellmanFord Output Time : " + (end - start));
+
+
+        start = System.currentTimeMillis();
+        System.out.println("SPFA ===> ");
+        boolean cycle = spfa();
+        if (cycle) {
+            dist[E] = Integer.MAX_VALUE;
+        }
+
+        printResult();
+        end = System.currentTimeMillis();
+        System.out.println("SPFA Output Time : " + (end - start));
+    }
+
+    private static boolean spfa() {
+        Arrays.fill(dist, Integer.MIN_VALUE);
+
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(0);
+        dist[0] = earns[0];
+
+        int[] cycle = new int[N];
+        cycle[0]++;
+
+        while (!q.isEmpty()) {
+            int now = q.poll();
+
+            for (Edge edge : linkEdges[now]) {
+                int next = edge.end;
+                int nextCost = dist[now] + edge.cost + earns[next];
+
+                if (dist[next] < nextCost) {
+                    dist[next] = nextCost;
+
+                    if (++cycle[next] >= N) {
+                        return true;
+                    }
+
+                    q.offer(next);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static void bellmanFord() {
+        Arrays.fill(dist, Integer.MIN_VALUE);
 
         dist[0] = earns[0];
         for (int i=0; i<N+100; i++) {
@@ -69,7 +130,9 @@ public class A1219 {
                 }
             }
         }
+    }
 
+    private static void printResult() {
         if (dist[E] == -Integer.MIN_VALUE) {
             System.out.println("gg");
         } else if (dist[E] == Integer.MAX_VALUE) {
