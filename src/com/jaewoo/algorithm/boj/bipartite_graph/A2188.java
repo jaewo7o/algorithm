@@ -27,11 +27,11 @@ public class A2188 {
         matchA = new int[N + 1];
         matchB = new int[M + 1];
         connect = new boolean[N + 1][M + 1];
-        for (int i=1, x; i<=M; i++) {
+        for (int i=1, x, j; i<=M; i++) {
             st = new StringTokenizer(br.readLine());
 
             x = Integer.parseInt(st.nextToken());
-            for (int m=1, j; m<=x; m++) {
+            while (x-- > 0){
                 j = Integer.parseInt(st.nextToken());
                 connect[i][j] = true;
             }
