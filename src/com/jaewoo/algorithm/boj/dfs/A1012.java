@@ -23,6 +23,7 @@ public class A1012 {
             N = Integer.parseInt(st.nextToken());
             K = Integer.parseInt(st.nextToken());
 
+            // initialize
             maps = new int[M + 1][N + 1];
             for (int i=1, m, n; i<=K; i++) {
                 st = new StringTokenizer(br.readLine());
@@ -32,6 +33,7 @@ public class A1012 {
                 maps[m + 1][n + 1] = 1;
             }
 
+            // solve
             int count = 0;
             for (int m=1; m<=M; m++) {
                 for (int n=1; n<=N; n++) {
@@ -47,6 +49,7 @@ public class A1012 {
     }
 
     private static void dfs(int m, int n) {
+        // 방문했던 cell은 초기화 처리
         maps[m][n] = 0;
 
         int nm, nn;
