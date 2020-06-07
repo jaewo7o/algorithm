@@ -20,10 +20,11 @@ public class A1753 {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter((new OutputStreamWriter(System.out)));
-        StringTokenizer st = new StringTokenizer(br.readLine());
 
+        StringTokenizer st = new StringTokenizer(br.readLine());
         V = Integer.parseInt(st.nextToken());
         E = Integer.parseInt(st.nextToken());
+
         S = Integer.parseInt(br.readLine());
 
         dist = new int[V + 1];
