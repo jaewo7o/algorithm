@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class A2750 {
     static int N;
@@ -32,6 +31,47 @@ public class A2750 {
         int[] result3 = insertionSort(Arrays.copyOf(numbers, N));
         System.out.print("insertionSort Result : ");
         IntStream.of(result3).forEach(x -> System.out.print(x + " "));
+        System.out.println("\n");
+
+        int[] result4 = quickSort(Arrays.copyOf(numbers, N));
+        System.out.print("quickSort Result : ");
+        IntStream.of(result4).forEach(x -> System.out.print(x + " "));
+    }
+
+    private static int[] quickSort(int[] numbers) {
+        quickSort(numbers, 0, numbers.length - 1);
+        return numbers;
+    }
+
+    private static void quickSort(int[] numbers, int low, int high) {
+        if (low >= high) {
+            return;
+        }
+
+        int mid = partition(numbers, low, high);
+        quickSort(numbers, low, mid - 1);
+        quickSort(numbers, mid, high);
+    }
+
+    private static int partition(int[] numbers, int low, int high) {
+        int pivot = numbers[(low + high)/2];
+        while (low <= high) {
+            while (numbers[low] < pivot) {
+                low++;
+            }
+
+            while (numbers[high] > pivot) {
+                high--;
+            }
+
+            if (low <= high) {
+                swap(numbers, low, high);
+                low++;
+                high--;
+            }
+        }
+
+        return low;
     }
 
     private static int[] insertionSort(int[] numbers) {
@@ -88,4 +128,13 @@ public class A2750 {
 3
 4
 1
+
+7
+6
+5
+1
+4
+7
+2
+3
 */
