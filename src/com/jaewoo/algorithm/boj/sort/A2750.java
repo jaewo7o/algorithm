@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 
 public class A2750 {
     static int N;
+    static int[] temp;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -36,6 +37,59 @@ public class A2750 {
         int[] result4 = quickSort(Arrays.copyOf(numbers, N));
         System.out.print("quickSort Result : ");
         IntStream.of(result4).forEach(x -> System.out.print(x + " "));
+        System.out.println("\n");
+
+        temp = new int[N];
+        int[] result5 = mergeSort(Arrays.copyOf(numbers, N));
+        System.out.print("mergeSort Result : ");
+        IntStream.of(result5).forEach(x -> System.out.print(x + " "));
+    }
+
+    private static int[] mergeSort(int[] numbers) {
+        mergeSort(numbers, 0, N - 1);
+        return numbers;
+    }
+
+    private static void mergeSort(int[] numbers, int left, int right) {
+        if (left == right) {
+            return;
+        }
+        
+        int middle = (left + right) / 2;
+        mergeSort(numbers, left, middle);
+        mergeSort(numbers, middle + 1, right);
+        merge(numbers, left, right);
+    }
+
+    private static void merge(int[] numbers, int left, int right) {
+        int middle = (left + right) / 2;
+        int i = left;
+        int j = middle + 1;
+        int k = left;
+
+        while (i <= middle && j <= right) {
+            if (numbers[i] < numbers[j]) {
+                temp[k++] = numbers[i];
+                i++;
+            } else {
+                temp[k++] = numbers[j];
+                j++;
+            }
+        }
+
+        if (i > middle) {
+            for (int x = j; x <= right; x++) {
+                temp[k++] = numbers[x];
+            }
+        } else {
+            for (int x = i; x <= middle; x++) {
+                temp[k++] = numbers[x];
+            }
+        }
+
+        for (int x = left; x <= right; x++) {
+            numbers[x] = temp[x];
+        }
     }
 
     private static int[] quickSort(int[] numbers) {
