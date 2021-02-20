@@ -47,13 +47,13 @@ public class A2887 {
             parents[i] = i;
         }
 
-//        int count = 0;
+        int count = 0;
         int weight = 0;
-        while ( !pq.isEmpty() ) {
+        while ( count < N - 1 ) {
             Edge edge = pq.poll();
             if (!isSameParent(edge.start, edge.end)) {
                 unionParent(edge.start, edge.end);
-//                count++;
+                count++;
                 weight += edge.weight;
             }
         }

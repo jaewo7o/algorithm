@@ -35,13 +35,15 @@ public class A1197 {
         }
 
         int result = 0;
+        int count = 0;
         Edge edge;
-        for (int i = 1; i <= E; i++) {
+        while (count < V - 1) {
             edge = pq.poll();
 
             if (findParent(edge.s) != findParent(edge.e)) {
                 result += edge.w;
                 union(edge.s, edge.e);
+                count++;
             }
         }
 

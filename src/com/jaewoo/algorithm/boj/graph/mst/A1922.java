@@ -35,13 +35,15 @@ public class A1922 {
         }
 
         int sum = 0;
+        int count = 0;
         Edge edge;
-        for (int i=1; i<=M; i++) {
+        while (count < N - 1) {
             edge = pq.poll();
 
             if (findParent(edge.s) != findParent(edge.e)) {
                 sum += edge.w;
                 union(edge.s, edge.e);
+                count++;
             }
         }
 

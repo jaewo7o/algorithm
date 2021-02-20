@@ -37,11 +37,12 @@ public class A1647 {
         int sum = 0;
         int count = 0;
         // NODE 1개 떨어트리기 위해서는 N-2개 ROUTE가 필요
-        while ( count++ < N - 2 ) {
+        while ( count < N - 2 ) {
             Route r = pq.poll();
             if (!isSameParent(r.s, r.e)) {
                 unionParent(r.s, r.e);
                 sum += r.w;
+                count++;
             }
         }
 
