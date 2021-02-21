@@ -30,13 +30,13 @@ public class A1753 {
         dist = new int[V + 1];
         visit = new boolean[V + 1];
         List<Edge>[] linkEdges = new ArrayList[V + 1];
-        for (int i=1; i<=V; i++) {
+        for (int i = 1; i <= V; i++) {
             dist[i] = Integer.MAX_VALUE;
             linkEdges[i] = new ArrayList<>();
         }
 
         int s, e, w;
-        for (int i=1; i<=E; i++) {
+        for (int i = 1; i <= E; i++) {
             st = new StringTokenizer(br.readLine());
 
             s = Integer.parseInt(st.nextToken());
@@ -47,7 +47,7 @@ public class A1753 {
 
         dijkstra(linkEdges, S);
 
-        for (int i=1; i<=V; i++) {
+        for (int i = 1; i <= V; i++) {
             if (dist[i] == Integer.MAX_VALUE) {
                 bw.write("INF\n");
             } else {
@@ -65,7 +65,7 @@ public class A1753 {
         dist[start] = 0;
 
         int now, next;
-        while(!pq.isEmpty()) {
+        while (!pq.isEmpty()) {
             now = pq.poll().getEnd();
             if (visit[now]) {
                 continue;
