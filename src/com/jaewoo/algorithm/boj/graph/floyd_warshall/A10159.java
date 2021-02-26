@@ -7,13 +7,46 @@ import java.util.StringTokenizer;
 
 public class A10159 {
 
-    private static final int INF = 100000;
     static int N;
     static int M;
 
     static int[][] maps;
 
     public static void main(String[] args) throws IOException {
+        initialize();
+
+        floydWarshal();
+
+        printResult();
+    }
+
+    private static void printResult() {
+        int count;
+        for (int i=1; i<=N; i++) {
+            count = 0;
+            for (int j=1; j<=N; j++) {
+                if (maps[i][j] == 0 && maps[j][i] == 0) {
+                    count++;
+                }
+            }
+
+            System.out.println(count);
+        }
+    }
+
+    private static void floydWarshal() {
+        for (int k=1; k<=N; k++) {
+            for (int i=1; i<=N; i++) {
+                for (int j=1; j<=N; j++) {
+                    if (maps[i][k] == 1 && maps[k][j] == 1) {
+                        maps[i][j] = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    private static void initialize() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         N = Integer.parseInt(br.readLine());
@@ -24,10 +57,10 @@ public class A10159 {
         for (int i=1; i<=N; i++) {
             for (int j=1; j<=N; j++) {
                 if (i == j) {
-                    continue;
+                    maps[i][j] = 1;
+                } else {
+                    maps[i][j] = 0;
                 }
-
-                maps[i][j] = INF;
             }
         }
 
@@ -38,32 +71,6 @@ public class A10159 {
             e = Integer.parseInt(st.nextToken());
 
             maps[s][e] = 1;
-        }
-
-        for (int k=1; k<=N; k++) {
-            for (int i=1; i<=N; i++) {
-                for (int j=1; j<=N; j++) {
-                    if (maps[i][k] == 1 && maps[k][j] == 1) {
-                        maps[i][j] = 1;
-                    }
-                }
-            }
-        }
-
-        int count;
-        for (int i=1; i<=N; i++) {
-            count = 0;
-            for (int j=1; j<=N; j++) {
-                if (i == j) {
-                    continue;
-                }
-
-                if (maps[i][j] == INF && maps[j][i] == INF) {
-                    count++;
-                }
-            }
-
-            System.out.println(count);
         }
     }
 }
