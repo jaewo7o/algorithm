@@ -84,10 +84,7 @@ public class A5719 {
 
             for (Edge edge : shortestPaths[now]) {
                 if (dist[edge.v] == dist[edge.u] + edge.w) {
-                    edges[edge.u].removeIf(edge1 -> {
-                        return edge.v == edge1.v;
-                    });
-
+                    edges[edge.u].removeIf(x -> edge.v == x.v);
                     q.offer(edge.u);
                 }
             }

@@ -48,8 +48,13 @@ public class A1261 {
         while (!pq.isEmpty()) {
             Edge currentEdge = pq.poll();
 
-            int nextX = 0;
-            int nextY = 0;
+            int nextX = currentEdge.getX();
+            int nextY = currentEdge.getY();
+
+            if (nextX == N && nextY == M) {
+                return;
+            }
+
             for (int k=1; k<=4; k++) {
                 if (k == 1) {
                     nextX = currentEdge.getX();
