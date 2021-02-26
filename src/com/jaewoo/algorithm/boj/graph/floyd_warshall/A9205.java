@@ -7,15 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-class Point {
-    int x;
-    int y;
-
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-}
 
 public class A9205 {
     private static int T;
@@ -69,6 +60,16 @@ public class A9205 {
 
     private static int getManhattanDistance(Point p1, Point p2) {
         return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
+    }
+
+    static class Point {
+        int x;
+        int y;
+
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 }
 
