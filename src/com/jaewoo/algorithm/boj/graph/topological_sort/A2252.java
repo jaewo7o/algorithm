@@ -1,11 +1,11 @@
-package com.jaewoo.algorithm.boj.topological_sort;
+package com.jaewoo.algorithm.boj.graph.topological_sort;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class A2252 {
+public class    A2252 {
 
     static int N;
     static int M;

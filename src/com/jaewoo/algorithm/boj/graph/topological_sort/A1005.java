@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.topological_sort;
+package com.jaewoo.algorithm.boj.graph.topological_sort;
 
 import java.io.BufferedReader;
 import java.io.IOException;
