@@ -42,6 +42,8 @@ public class A2150 {
             reverseLinks[e].add(s);
         }
 
+        scces = new ArrayList<>();
+
         //tajan();
         kosaraju();
 
@@ -50,7 +52,6 @@ public class A2150 {
 
     private static void kosaraju() {
         isVisit = new boolean[V + 1];
-        scces = new ArrayList<>();
         for (int i = 1; i <= V; i++) {
             if (!isVisit[i]) {
                 dfsKosaraju(i);
@@ -66,6 +67,7 @@ public class A2150 {
 
             scc = new ArrayList<>();
             reDfsKosaraju(node);
+            scc.sort(Comparator.naturalOrder());
             scces.add(scc);
         }
     }
@@ -106,7 +108,6 @@ public class A2150 {
     }
 
     private static void tajan() {
-        scces = new ArrayList<>();
         parent = new int[V + 1];
         isFinished = new boolean[V + 1];
         for (int i = 1; i <= V; i++) {
@@ -140,12 +141,7 @@ public class A2150 {
                 }
             }
 
-            scc.sort(new Comparator<Integer>() {
-                @Override
-                public int compare(Integer o1, Integer o2) {
-                    return o1.compareTo(o2);
-                }
-            });
+            scc.sort(Comparator.naturalOrder());
 
             scces.add(scc);
         }
