@@ -1,21 +1,22 @@
-package com.jaewoo.algorithm.boj.graph.bipartite_graph;
+package com.jaewoo.algorithm.boj.graph.maximum_flow.bipartite_graph;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class A11375 {
+public class A11376 {
 
     static int N;
     static int M;
 
-    static boolean[][] jobs;
+    static List<Integer>[] jobs;
     static boolean[] visit;
 
-    static int[] matchA;
-    static int[] matchB;
+    static int[] matchResult;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,43 +25,44 @@ public class A11375 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        matchA = new int[N + 1];
-        matchB = new int[M + 1];
-        jobs = new boolean[N + 1][M + 1];
+        matchResult = new int[N + 1];
+        jobs = new ArrayList[N + 1];
         visit = new boolean[N + 1];
-        for (int i=1, k; i<=M; i++) {
+        for (int i = 1, k; i <= N; i++) {
+            jobs[i] = new ArrayList<>();
+
             st = new StringTokenizer(br.readLine());
             k = Integer.parseInt(st.nextToken());
             while (k-- > 0) {
                 int j = Integer.parseInt(st.nextToken());
-                jobs[i][j] = true;
+                jobs[i].add(j);
             }
         }
 
         int count = 0;
-        for (int i=1; i<=N; i++) {
-            Arrays.fill(visit, false);
-            if (dfs(i)) {
-                count++;
+        for (int k = 1; k <= 2; k++) {
+            for (int i = 1; i <= N; i++) {
+                Arrays.fill(visit, false);
+                if (dfs(i)) {
+                    count++;
+                }
             }
         }
 
         System.out.println(count);
     }
 
-    private static boolean dfs(int start) {
-        if (visit[start]) {
-            return false;
-        }
+    private static boolean dfs(int x) {
+        for (int y : jobs[x]) {
+            if (visit[y]) {
+                continue;
+            }
 
-        visit[start] = true;
-        for (int j=1; j<=M; j++) {
-            if (jobs[start][j]) {
-                if (matchB[j] == 0 || dfs(matchB[j])) {
-                    matchA[start] = j;
-                    matchB[j] = start;
-                    return true;
-                }
+            visit[y] = true;
+
+            if (matchResult[y] == 0 || dfs(matchResult[y])) {
+                matchResult[y] = x;
+                return true;
             }
         }
 
@@ -71,8 +73,8 @@ public class A11375 {
 /* input
 5 5
 2 1 2
-1 1
-2 2 3
-3 3 4 5
-1 1
+2 1 2
+2 1 2
+2 4 5
+0
  */

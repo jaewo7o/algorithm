@@ -1,21 +1,20 @@
-package com.jaewoo.algorithm.boj.graph.bipartite_graph;
+package com.jaewoo.algorithm.boj.graph.maximum_flow.bipartite_graph;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class A2188 {
 
     static int N;
     static int M;
-    static boolean[][] connect;
+    static List<Integer> links[];
     static boolean[] visit;
-    static int [] matchA;
-    static int [] matchB;
-
-
+    static int[] matchB;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,22 +23,24 @@ public class A2188 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        matchA = new int[N + 1];
         matchB = new int[M + 1];
-        connect = new boolean[N + 1][M + 1];
-        for (int i=1, x, j; i<=M; i++) {
+        links = new ArrayList[N + 1];
+
+        for (int i = 1, x, j; i <= N; i++) {
+            links[i] = new ArrayList<>();
+
             st = new StringTokenizer(br.readLine());
 
             x = Integer.parseInt(st.nextToken());
-            while (x-- > 0){
+            while (x-- > 0) {
                 j = Integer.parseInt(st.nextToken());
-                connect[i][j] = true;
+                links[i].add(j);
             }
         }
 
         int count = 0;
         visit = new boolean[N + 1];
-        for (int i=1; i<=N; i++) {
+        for (int i = 1; i <= N; i++) {
             Arrays.fill(visit, false);
             if (dfs(i)) {
                 count++;
@@ -49,20 +50,18 @@ public class A2188 {
         System.out.println(count);
     }
 
-    private static boolean dfs(int start) {
-        if (visit[start]) {
-            return false;
-        }
+    // 매칭에 성공한 경우 true 반환
+    private static boolean dfs(int x) {
+        for (int y : links[x]) {
+            // 이미 처리한 축사는 제외
+            if (visit[y]) {
+                continue;
+            }
 
-        visit[start] = true;
-
-        for (int m=1; m<=M; m++) {
-            if (connect[start][m]) {
-                if (matchB[m] == 0 || dfs(matchB[m]) ) {
-                    matchA[start] = m;
-                    matchB[m] = start;
-                    return true;
-                }
+            visit[y] = true;
+            if (matchB[y] == 0 || dfs(matchB[y])) {
+                matchB[y] = x;
+                return true;
             }
         }
 
