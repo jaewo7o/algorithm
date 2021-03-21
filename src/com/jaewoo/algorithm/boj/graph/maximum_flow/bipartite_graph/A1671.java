@@ -3,7 +3,9 @@ package com.jaewoo.algorithm.boj.graph.maximum_flow.bipartite_graph;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class A1671 {
@@ -12,7 +14,7 @@ public class A1671 {
     static int[] size;
     static int[] velocity;
     static int[] brain;
-    static boolean[][] connect;
+    static List<Integer>[] links;
     private static boolean[] visit;
     private static int[] B;
 
@@ -23,10 +25,10 @@ public class A1671 {
         size = new int[N + 1];
         velocity = new int[N + 1];
         brain = new int[N + 1];
-        connect = new boolean[N + 1][N + 1];
         B = new int[N + 1];
+        links = new ArrayList[N + 1];
 
-        for (int i=1; i<=N; i++) {
+        for (int i = 1; i <= N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
 
             size[i] = Integer.parseInt(st.nextToken());
@@ -34,8 +36,9 @@ public class A1671 {
             brain[i] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i=1; i<=N; i++) {
-            for (int j=1; j<=N; j++) {
+        for (int i = 1; i <= N; i++) {
+            links[i] = new ArrayList<>();
+            for (int j = 1; j <= N; j++) {
                 if (i == j) {
                     continue;
                 }
@@ -45,15 +48,14 @@ public class A1671 {
                 }
 
                 if (size[i] >= size[j] && velocity[i] >= velocity[j] && brain[i] >= brain[j]) {
-                    connect[i][j] = true;
+                    links[i].add(j);
                 }
             }
         }
 
-        //System.out.println(Arrays.deepToString(connect));
         int count = 0;
         visit = new boolean[N + 1];
-        for (int i=1; i<=N; i++) {
+        for (int i = 1; i <= N; i++) {
             Arrays.fill(visit, false);
             if (dfs(i)) {
                 count++;
@@ -68,19 +70,16 @@ public class A1671 {
         System.out.println(N - count);
     }
 
-    private static boolean dfs(int start) {
-        if (visit[start]) {
-            return false;
-        }
+    private static boolean dfs(int x) {
+        for (int y : links[x]) {
+            if (visit[y]) {
+                continue;
+            }
 
-        visit[start] = true;
-
-        for (int j=1; j<=N; j++) {
-            if (connect[start][j]) {
-                if (B[j] == 0 || dfs(B[j])) {
-                    B[j] = start;
-                    return true;
-                }
+            visit[y] = true;
+            if (B[y] == 0 || dfs(B[y])) {
+                B[y] = x;
+                return true;
             }
         }
 
