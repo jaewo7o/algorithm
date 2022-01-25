@@ -7,6 +7,10 @@ import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+/*
+문제풀이 URL : https://cocoon1787.tistory.com/437
+*/
+
 public class A9370 {
 
     public static final int INF = 10000;
