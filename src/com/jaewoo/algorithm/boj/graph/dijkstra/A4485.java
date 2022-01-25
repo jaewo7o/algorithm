@@ -50,11 +50,15 @@ public class A4485 {
                 nextX = p.x + dx[i];
                 nextY = p.y + dy[i];
 
-                if (nextX>=1 && nextX<=N && nextY>=1 && nextY<=N) {
-                    if (resultMaps[nextY][nextX] > maps[nextY][nextX] + p.w) {
-                        resultMaps[nextY][nextX] = maps[nextY][nextX] + p.w;
-                        q.offer(new Point(nextX, nextY, resultMaps[nextY][nextX]));
-                    }
+                // check out of box
+                if (nextX < 1 || nextX > N || nextY < 1 || nextY > N) {
+                    continue;
+                }
+
+                int nextWeight = maps[nextY][nextX] + p.w;
+                if (resultMaps[nextY][nextX] > nextWeight) {
+                    resultMaps[nextY][nextX] = nextWeight;
+                    q.offer(new Point(nextX, nextY, resultMaps[nextY][nextX]));
                 }
             }
         }

@@ -10,6 +10,7 @@ public class A1238 {
 
     /**
      * Floyd_warshall or dijkstra로 문제 풀이 가능
+     * dijkstra 문제풀이 URL : https://steady-coding.tistory.com/106
      */
 
     static int N;
@@ -30,8 +31,10 @@ public class A1238 {
         List<Edge>[] linkEdges = new ArrayList[N + 1];
         List<Edge>[] revLinkEdges = new ArrayList[N + 1];
         for (int i=1; i<=N; i++) {
+            // 노드까지 거리 초기화
             dist[i] = Integer.MAX_VALUE;
             revDist[i] = Integer.MAX_VALUE;
+
             linkEdges[i] = new ArrayList<>();
             revLinkEdges[i] = new ArrayList<>();
         }
@@ -43,6 +46,7 @@ public class A1238 {
             e = Integer.parseInt(st.nextToken());
             w = Integer.parseInt(st.nextToken());
 
+            // 길은 단방향이기 때문에 목적지까지와 목적지에서 출발하는 경우 2가지를 역방향으로 저장한다.
             linkEdges[s].add(new Edge(e, w));
             revLinkEdges[e].add(new Edge(s, w));
         }
@@ -50,6 +54,7 @@ public class A1238 {
         dijkstra(linkEdges, dist, X);
         dijkstra(revLinkEdges, revDist, X);
 
+        // 최장거리 계산
         int maxDist = 0;
         for (int i=1; i<=N; i++) {
             maxDist = Math.max(maxDist, dist[i] + revDist[i]);
@@ -62,26 +67,22 @@ public class A1238 {
     }
 
     private static void dijkstra(List<Edge>[] linkEdges, int[] dist, int start) {
-        boolean[] visit = new boolean[N + 1];
-
         PriorityQueue<Edge> pq = new PriorityQueue<>();
+
+        // 출발점 노드 설정
         pq.offer(new Edge(start, 0));
         dist[start] = 0;
 
-        int now, next;
+        int now, next, nextDistance;
         while (!pq.isEmpty()) {
             now = pq.poll().end;
 
-            if (visit[now]) {
-                continue;
-            }
-
-            visit[now] = true;
-            for (Edge edge : linkEdges[now]) {
-                next = edge.end;
-                if (!visit[next]) {
-                    dist[next] = Math.min(dist[next], dist[now] + edge.weight);
-                    pq.offer(new Edge(next, dist[next]));
+            for (Edge nextEdge : linkEdges[now]) {
+                next = nextEdge.end;
+                nextDistance = dist[now] + nextEdge.weight;
+                if (nextDistance < dist[next]) {
+                    dist[next] = nextDistance;
+                    pq.offer(nextEdge);
                 }
             }
         }

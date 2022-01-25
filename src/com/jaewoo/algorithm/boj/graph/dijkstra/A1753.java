@@ -15,7 +15,6 @@ public class A1753 {
     static int S;
 
     static int[] dist;
-    static boolean[] visit;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,7 +27,6 @@ public class A1753 {
         S = Integer.parseInt(br.readLine());
 
         dist = new int[V + 1];
-        visit = new boolean[V + 1];
         List<Edge>[] linkEdges = new ArrayList[V + 1];
         for (int i = 1; i <= V; i++) {
             dist[i] = Integer.MAX_VALUE;
@@ -64,19 +62,16 @@ public class A1753 {
         pq.offer(new Edge(start, 0));
         dist[start] = 0;
 
-        int now, next;
+        int now, next, nextDistance;
         while (!pq.isEmpty()) {
             now = pq.poll().getEnd();
-            if (visit[now]) {
-                continue;
-            }
 
-            visit[now] = true;
             for (Edge nextEdge : linkEdges[now]) {
                 next = nextEdge.getEnd();
-                if (!visit[next]) {
-                    dist[next] = Math.min(dist[next], dist[now] + nextEdge.getWeight());
-                    pq.offer(new Edge(next, dist[next]));
+                nextDistance = dist[now] + nextEdge.getWeight();
+                if (nextDistance < dist[next]) {
+                    dist[next] = nextDistance;
+                    pq.offer(nextEdge);
                 }
             }
         }

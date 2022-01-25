@@ -62,8 +62,6 @@ public class A1504 {
 
     private static int dijkstra(List<Edge>[] linkEdges, int start, int end) {
         int[] dist = new int[N + 1];
-        boolean[] visit = new boolean[N + 1];
-
         for (int i=1; i<=N; i++) {
             dist[i] = INF;
         }
@@ -72,19 +70,17 @@ public class A1504 {
         pq.offer(new Edge(start, 0));
         dist[start] = 0;
 
-        int now, next;
+        int now, next, nextDistance;
         while(!pq.isEmpty()) {
             now = pq.poll().end;
-            if (visit[now]) {
-                continue;
-            }
 
-            visit[now] = true;
-            for (Edge edge : linkEdges[now]) {
-                next = edge.end;
-                if (!visit[next]) {
-                    dist[next] = Math.min(dist[next], dist[now] + edge.weight);
-                    pq.offer(new Edge(next, dist[next]));
+            for (Edge nextEdge : linkEdges[now]) {
+                next = nextEdge.end;
+                nextDistance = dist[now] + nextEdge.weight;
+
+                if (nextDistance < dist[next]) {
+                    dist[next] = nextDistance;
+                    pq.offer(nextEdge);
                 }
             }
         }
@@ -117,4 +113,8 @@ public class A1504 {
 2 4 5
 1 4 4
 2 3
+*/
+
+/* OUTPUT
+7
  */

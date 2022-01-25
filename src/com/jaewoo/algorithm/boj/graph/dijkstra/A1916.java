@@ -10,7 +10,7 @@ public class A1916 {
     static int N;
     static int M;
 
-    static int[] dist;
+    static int[] cost;
     static boolean[] visit;
 
     public static void main(String[] args) throws IOException {
@@ -20,11 +20,11 @@ public class A1916 {
         N = Integer.parseInt(br.readLine());
         M = Integer.parseInt(br.readLine());
 
-        dist = new int[N + 1];
+        cost = new int[N + 1];
         visit = new boolean[N + 1];
         List<Edge>[] linkEdge = new ArrayList[N + 1];
         for (int i=1; i<=N; i++) {
-            dist[i] = Integer.MAX_VALUE;
+            cost[i] = Integer.MAX_VALUE;
             linkEdge[i] = new ArrayList<>();
         }
 
@@ -44,7 +44,7 @@ public class A1916 {
         e = Integer.parseInt(st.nextToken());
         dijkstra(linkEdge, s);
 
-        bw.write(dist[e] + "\n");
+        bw.write(cost[e] + "\n");
         bw.flush();
         bw.close();
     }
@@ -52,21 +52,18 @@ public class A1916 {
     private static void dijkstra(List<Edge>[] linkEdge, int s) {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(s, 0));
-        dist[s] = 0;
+        cost[s] = 0;
 
-        int now, next;
+        int now, next, nextCost;
         while(!pq.isEmpty()) {
             now = pq.poll().getEnd();
-            if (visit[now]) {
-                continue;
-            }
 
-            visit[now] = true;
             for (Edge nextNode : linkEdge[now]) {
                 next = nextNode.getEnd();
-                if (!visit[next]) {
-                    dist[next] = Math.min(dist[next], dist[now] + nextNode.getWeight());
-                    pq.offer(new Edge(next, nextNode.getWeight()));
+                nextCost = cost[now] + nextNode.getCost();
+                if (nextCost < cost[next]) {
+                    cost[next] = nextCost;
+                    pq.offer(nextNode);
                 }
             }
         }
@@ -74,24 +71,24 @@ public class A1916 {
 
     private static class Edge implements Comparable<Edge> {
         private int end;
-        private int weight;
+        private int cost;
 
         public Edge(int end, int weight) {
             this.end = end;
-            this.weight = weight;
+            this.cost = weight;
         }
 
         @Override
         public int compareTo(Edge edge) {
-            return this.weight - edge.weight;
+            return this.cost - edge.cost;
         }
 
         public int getEnd() {
             return end;
         }
 
-        public int getWeight() {
-            return weight;
+        public int getCost() {
+            return cost;
         }
     }
 }
@@ -109,3 +106,8 @@ public class A1916 {
 4 5 3
 1 5
 */
+
+
+/* OUTPUT
+4
+ */

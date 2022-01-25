@@ -7,18 +7,12 @@ import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-/*
-문제풀이 URL : https://cocoon1787.tistory.com/437
-자바소스 URL : https://studyandwrite.tistory.com/454
-*/
-
 public class A9370 {
 
     public static final int INF = 10000;
     static int T;
     static int N;
     static int[] dist;
-    static boolean[] visit;
     static int[][] maps;
 
     public static void main(String[] args) throws IOException {
@@ -49,10 +43,12 @@ public class A9370 {
                 v = Integer.parseInt(st.nextToken());
                 w = Integer.parseInt(st.nextToken());
 
+                // 길의 weight를 2배처리해서 2의 배수로 만든다.
                 maps[u][v] = w * 2;
                 maps[v][u] = w * 2;
             }
 
+            // 통과해야 할 간선은 1을 빼서 2의 배수가 안되도록 변경한다.
             maps[g][h] = maps[h][g] = maps[g][h] - 1;
 
             int[] targets = new int[ t + 1 ];
@@ -61,7 +57,6 @@ public class A9370 {
             }
 
             dist = new int[N + 1];
-            visit = new boolean[N + 1];
 
             Arrays.fill(dist, INF);
 
@@ -69,6 +64,7 @@ public class A9370 {
 
             Arrays.sort(targets);
             for (int i=1; i<=t; i++) {
+                // 도착 거리가 2의 배수가 아니라면 간선을 거친 경우로 판단하고 결과를 출력한다.
                 if (dist[targets[i]] % 2 == 1) {
                     System.out.print(targets[i] + " ");
                 }
@@ -86,15 +82,10 @@ public class A9370 {
         while(!pq.isEmpty()) {
             int now = pq.poll();
 
-            if (visit[now]) {
-                continue;
-            }
-            visit[now] = true;
-
             for (int j=1; j<=N; j++) {
-                int weight = maps[now][j];
-                if (!visit[j] && dist[j] > dist[now] + weight) {
-                    dist[j] = dist[now] + weight;
+                int nextWeight = dist[now] + maps[now][j];
+                if (dist[j] > nextWeight) {
+                    dist[j] = nextWeight;
                     pq.offer(j);
                 }
             }

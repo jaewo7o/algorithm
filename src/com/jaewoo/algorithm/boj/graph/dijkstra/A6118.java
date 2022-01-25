@@ -61,8 +61,9 @@ public class A6118 {
             int now = pq.poll();
 
             for (int next : edges[now]) {
-                if (dist[next] > dist[now] + 1) {
-                    dist[next] = dist[now] + 1;
+                int nextDistance = dist[now] + 1;
+                if (dist[next] > nextDistance) {
+                    dist[next] = nextDistance;
                     pq.offer(next);
                 }
             }

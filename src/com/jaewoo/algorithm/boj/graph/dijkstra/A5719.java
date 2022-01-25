@@ -100,8 +100,9 @@ public class A5719 {
             int now = pq.poll();
 
             for (Edge edge : edges[now]) {
-                if (dist[edge.v] >= dist[now] + edge.w) {
-                    dist[edge.v] = dist[now] + edge.w;
+                int nextDistance = dist[now] + edge.w;
+                if (dist[edge.v] >= nextDistance) {
+                    dist[edge.v] = nextDistance;
                     pq.offer(edge.v);
                     shortestPaths[edge.v].add(edge);
                 }
