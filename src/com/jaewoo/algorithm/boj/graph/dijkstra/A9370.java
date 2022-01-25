@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 
 /*
 문제풀이 URL : https://cocoon1787.tistory.com/437
+자바소스 URL : https://studyandwrite.tistory.com/454
 */
 
 public class A9370 {
