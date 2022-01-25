@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.dijkstra;
+package com.jaewoo.algorithm.boj.basic.bfs;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +14,9 @@ public class A1261 {
 
     private static int N;
     private static int M;
+
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -34,12 +37,12 @@ public class A1261 {
             }
         }
 
-        dijkstra(map);
+        bfs(map);
 
         System.out.println(d[M-1][N-1]);
     }
 
-    private static void dijkstra(int[][] m) {
+    private static void bfs(int[][] m) {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(0, 0, 0));
 
@@ -48,34 +51,20 @@ public class A1261 {
         while (!pq.isEmpty()) {
             Edge currentEdge = pq.poll();
 
-            int nextX = currentEdge.getX();
-            int nextY = currentEdge.getY();
+            for (int k=0, nextX, nextY; k<4; k++) {
+                nextX = currentEdge.getX() + dx[k];
+                nextY = currentEdge.getY() + dy[k];
 
-            if (nextX == N && nextY == M) {
-                return;
-            }
-
-            for (int k=1; k<=4; k++) {
-                if (k == 1) {
-                    nextX = currentEdge.getX();
-                    nextY = currentEdge.getY() + 1;
-                } else if (k == 2) {
-                    nextX = currentEdge.getX() + 1;
-                    nextY = currentEdge.getY();
-                } else if (k == 3) {
-                    nextX = currentEdge.getX();
-                    nextY = currentEdge.getY() - 1;
-                } else if (k == 4) {
-                    nextX = currentEdge.getX() - 1;
-                    nextY = currentEdge.getY();
+                // out of box 인 경우 skip
+                if (nextX < 0 || nextY < 0 || nextX >= M || nextY >= N) {
+                    continue;
                 }
 
-                if (nextX >=0 && nextY >=0 && nextX < M && nextY < N) {
-                    if (!v[nextX][nextY]) {
-                        d[nextX][nextY] = Math.min(d[nextX][nextY], currentEdge.getWeight() + map[nextX][nextY]);
-                        v[nextX][nextY] = true;
-                        pq.offer(new Edge(nextX, nextY, d[nextX][nextY]));
-                    }
+                // 미방문 노드인 경우 거리 업데이트
+                if (!v[nextX][nextY]) {
+                    d[nextX][nextY] = Math.min(d[nextX][nextY], currentEdge.getWeight() + map[nextX][nextY]);
+                    v[nextX][nextY] = true;
+                    pq.offer(new Edge(nextX, nextY, d[nextX][nextY]));
                 }
             }
         }
@@ -119,4 +108,8 @@ public class A1261 {
 110001
 011010
 100010
+ */
+
+/* output
+2
  */
