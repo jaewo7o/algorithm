@@ -6,6 +6,10 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class A1613 {
+    
+    /* 
+        문제풀이 URL : https://jaimemin.tistory.com/673
+    */
 
     // 위상정렬로 문제 풀이도 가능함
     private static final int INF = 100000;
