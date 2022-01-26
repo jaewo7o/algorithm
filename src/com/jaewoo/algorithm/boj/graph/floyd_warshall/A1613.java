@@ -8,7 +8,9 @@ import java.util.StringTokenizer;
 public class A1613 {
     
     /* 
-        문제풀이 URL : https://jaimemin.tistory.com/673
+        문제풀이 URL : 
+           1. https://yabmoons.tistory.com/107
+           2. https://jaimemin.tistory.com/673
     */
     private static final int INF = 100000;
     static int N;
