@@ -10,8 +10,6 @@ public class A1613 {
     /* 
         문제풀이 URL : https://jaimemin.tistory.com/673
     */
-
-    // 위상정렬로 문제 풀이도 가능함
     private static final int INF = 100000;
     static int N;
     static int K;
