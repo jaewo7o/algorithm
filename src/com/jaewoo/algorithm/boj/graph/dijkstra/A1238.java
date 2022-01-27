@@ -51,8 +51,8 @@ public class A1238 {
             revLinkEdges[e].add(new Edge(s, w));
         }
 
-        dijkstra(linkEdges, dist, X);
         dijkstra(revLinkEdges, revDist, X);
+        dijkstra(linkEdges, dist, X);
 
         // 최장거리 계산
         int maxDist = 0;
