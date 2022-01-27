@@ -19,7 +19,7 @@ public class A2458 {
         M = Integer.parseInt(st.nextToken());
 
         maps = new int[N + 1][N + 1];
-        for (int i=1, s, e; i<=M; i++) {
+        for (int i = 1, s, e; i <= M; i++) {
             st = new StringTokenizer(br.readLine());
             s = Integer.parseInt(st.nextToken());
             e = Integer.parseInt(st.nextToken());
@@ -27,18 +27,12 @@ public class A2458 {
             maps[s][e] = 1;
         }
 
-        calculateRank();
+        floyd();
 
         int count, person = 0;
-        for (int i=1; i<=N; i++) {
+        for (int i = 1; i <= N; i++) {
             count = 0;
-
-            for (int j=1; j<=N; j++) {
-
-                if (i == j) {
-                    continue;
-                }
-
+            for (int j = 1; j <= N; j++) {
                 if (maps[i][j] == 1 || maps[j][i] == 1) {
                     count++;
                 }
@@ -52,14 +46,10 @@ public class A2458 {
         System.out.println(person);
     }
 
-    private static void calculateRank() {
-        for (int k=1; k<=N; k++) {
-            for (int i=1; i<=N; i++) {
-                for (int j=1; j<=N; j++) {
-                    if (i == j || k == i || k == j) {
-                        continue;
-                    }
-
+    private static void floyd() {
+        for (int k = 1; k <= N; k++) {
+            for (int i = 1; i <= N; i++) {
+                for (int j = 1; j <= N; j++) {
                     if (maps[k][j] == 1 && maps[i][k] == 1) {
                         maps[i][j] = 1;
                     }

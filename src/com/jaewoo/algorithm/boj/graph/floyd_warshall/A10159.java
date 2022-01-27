@@ -13,18 +13,33 @@ public class A10159 {
     static int[][] maps;
 
     public static void main(String[] args) throws IOException {
-        initialize();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        floydWarshal();
+        N = Integer.parseInt(br.readLine());
+        M = Integer.parseInt(br.readLine());
 
-        printResult();
-    }
+        maps = new int[N + 1][N + 1];
 
-    private static void printResult() {
+        StringTokenizer st;
+        for (int i = 1, s, e; i <= M; i++) {
+            st = new StringTokenizer(br.readLine());
+            s = Integer.parseInt(st.nextToken());
+            e = Integer.parseInt(st.nextToken());
+
+            maps[s][e] = 1;
+        }
+
+        floyd();
+
         int count;
-        for (int i=1; i<=N; i++) {
+        for (int i = 1; i <= N; i++) {
             count = 0;
-            for (int j=1; j<=N; j++) {
+            for (int j = 1; j <= N; j++) {
+                // 자기자신은 무게순서를 알수 있어 통과
+                if (i == j) {
+                    continue;
+                }
+
                 if (maps[i][j] == 0 && maps[j][i] == 0) {
                     count++;
                 }
@@ -34,43 +49,15 @@ public class A10159 {
         }
     }
 
-    private static void floydWarshal() {
-        for (int k=1; k<=N; k++) {
-            for (int i=1; i<=N; i++) {
-                for (int j=1; j<=N; j++) {
+    private static void floyd() {
+        for (int k = 1; k <= N; k++) {
+            for (int i = 1; i <= N; i++) {
+                for (int j = 1; j <= N; j++) {
                     if (maps[i][k] == 1 && maps[k][j] == 1) {
                         maps[i][j] = 1;
                     }
                 }
             }
-        }
-    }
-
-    private static void initialize() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        N = Integer.parseInt(br.readLine());
-        M = Integer.parseInt(br.readLine());
-
-        maps = new int[N + 1][N + 1];
-
-        for (int i=1; i<=N; i++) {
-            for (int j=1; j<=N; j++) {
-                if (i == j) {
-                    maps[i][j] = 1;
-                } else {
-                    maps[i][j] = 0;
-                }
-            }
-        }
-
-        StringTokenizer st;
-        for (int i=1, s, e; i<=M; i++) {
-            st = new StringTokenizer(br.readLine());
-            s = Integer.parseInt(st.nextToken());
-            e = Integer.parseInt(st.nextToken());
-
-            maps[s][e] = 1;
         }
     }
 }

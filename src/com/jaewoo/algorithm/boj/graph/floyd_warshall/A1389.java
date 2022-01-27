@@ -7,6 +7,10 @@ import java.util.StringTokenizer;
 
 public class A1389 {
 
+    /*
+        floydwarshal과 dfs/bfs로 문제 풀이가 가능
+     */
+
     static int N;
     static int M;
     static int[][] relation;
@@ -21,13 +25,16 @@ public class A1389 {
         M = Integer.parseInt(st.nextToken());
 
         relation = new int[N + 1][N + 1];
-        for (int i=1; i<=N; i++) {
-            for (int j=1; j<=N; j++) {
-                relation[i][j] = INF;
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= N; j++) {
+                // 자기자신과는 관계가 0으로 세팅
+                if (i != j) {
+                    relation[i][j] = INF;
+                }
             }
         }
 
-        for (int i=1, s, e; i<=M; i++) {
+        for (int i = 1, s, e; i <= M; i++) {
             st = new StringTokenizer(br.readLine());
             s = Integer.parseInt(st.nextToken());
             e = Integer.parseInt(st.nextToken());
@@ -36,14 +43,14 @@ public class A1389 {
             relation[e][s] = 1;
         }
 
-        calculateDistance();
+        floyd();
 
         int minKebinBacon = INF;
         int minPerson = 0;
         int sum;
-        for (int i=1; i<=N; i++) {
+        for (int i = 1; i <= N; i++) {
             sum = 0;
-            for (int j=1; j<=N; j++) {
+            for (int j = 1; j <= N; j++) {
                 sum += relation[i][j];
             }
 
@@ -56,11 +63,13 @@ public class A1389 {
         System.out.println(minPerson);
     }
 
-    private static void calculateDistance() {
-        for (int k=1; k<=N; k++) {
-            for (int i=1; i<=N; i++) {
-                for (int j=1; j<=N; j++) {
-                    relation[i][j] = Math.min(relation[i][j], relation[i][k] + relation[k][i]);
+    private static void floyd() {
+        for (int k = 1; k <= N; k++) {
+            for (int i = 1; i <= N; i++) {
+                for (int j = 1; j <= N; j++) {
+                    if (relation[i][j] > relation[i][k] + relation[k][j]) {
+                        relation[i][j] = relation[i][k] + relation[k][j];
+                    }
                 }
             }
         }

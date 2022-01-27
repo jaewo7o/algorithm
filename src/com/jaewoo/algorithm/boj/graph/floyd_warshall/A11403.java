@@ -21,7 +21,7 @@ public class A11403 {
             }
         }
 
-        floydWarshall();
+        floyd();
 
         printResult();
     }
@@ -35,10 +35,10 @@ public class A11403 {
             sb.append("\n");
         }
 
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
-    public static void floydWarshall() {
+    public static void floyd() {
         for (int k = 1; k <= N; k++) {
             for (int i = 1; i <= N; i++) {
                 for (int j = 1; j <= N; j++) {

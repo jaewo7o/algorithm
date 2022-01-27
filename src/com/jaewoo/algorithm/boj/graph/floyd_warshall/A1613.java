@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class A1613 {
-    
+
     /* 
         문제풀이 URL : 
            1. https://yabmoons.tistory.com/107
@@ -29,53 +29,38 @@ public class A1613 {
 
         dist = new int[N + 1][N + 1];
 
-        for (int i=1; i<=N; i++) {
-            for (int j=1; j<=N; j++) {
-                if (i == j) {
-                    continue;
-                }
-
-                dist[i][j] = INF;
-            }
-        }
-
-        for (int i=1, s, e; i<=K; i++) {
+        for (int i = 1, s, e; i <= K; i++) {
             st = new StringTokenizer(br.readLine());
             s = Integer.parseInt(st.nextToken());
             e = Integer.parseInt(st.nextToken());
 
-            dist[s][e] = 1;
+            dist[s][e] = -1;
+            dist[e][s] = 1;
         }
 
-        for (int k=1; k<=N; k++) {
-            for (int i=1; i<=N; i++) {
-                for (int j=1; j<=N; j++) {
-                    if (dist[i][k] == 1 && dist[k][j] == 1) {
-                        dist[i][j] = 1;
-                    }
-                }
-            }
-        }
-
-        //System.out.println(Arrays.deepToString(dist));
+        floyd();
 
         S = Integer.parseInt(br.readLine());
-        for (int i=1, s, e; i<=S; i++) {
+        for (int i = 1, s, e; i <= S; i++) {
             st = new StringTokenizer(br.readLine());
             s = Integer.parseInt(st.nextToken());
             e = Integer.parseInt(st.nextToken());
 
-            System.out.println(decision(s, e));
+            System.out.println(dist[s][e]);
         }
     }
 
-    private static int decision(int s, int e) {
-        if (dist[s][e] == 1) {
-            return -1;
-        } else if (dist[e][s] == 1) {
-            return 1;
-        } else {
-            return 0;
+    private static void floyd() {
+        for (int k = 1; k <= N; k++) {
+            for (int i = 1; i <= N; i++) {
+                for (int j = 1; j <= N; j++) {
+                    if (dist[i][k] == 1 && dist[k][j] == 1) {
+                        dist[i][j] = 1;
+                    } else if (dist[i][k] == -1 && dist[k][j] == -1) {
+                        dist[i][j] = -1;
+                    }
+                }
+            }
         }
     }
 }
