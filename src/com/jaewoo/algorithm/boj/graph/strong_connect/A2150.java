@@ -9,12 +9,10 @@ public class A2150 {
 
     private static int V;
     private static int E;
-    private static int[] parent;
+    private static int[] parents;
     private static boolean[] isFinished;
-    private static boolean[] isVisit;
     private static int id = 0;
     private static List<Integer>[] links;
-    private static List<Integer>[] reverseLinks;
     private static List<List<Integer>> scces;
     private static List<Integer> scc;
     private static Stack<Integer> stack = new Stack<>();
@@ -27,10 +25,8 @@ public class A2150 {
         E = Integer.parseInt(st.nextToken());
 
         links = new List[V + 1];
-        reverseLinks = new List[V + 1];
         for (int i = 1; i <= V; i++) {
             links[i] = new ArrayList<>();
-            reverseLinks[i] = new ArrayList<>();
         }
 
         for (int i = 1; i <= E; i++) {
@@ -39,57 +35,19 @@ public class A2150 {
             int e = Integer.parseInt(st.nextToken());
 
             links[s].add(e);
-            reverseLinks[e].add(s);
         }
 
         scces = new ArrayList<>();
 
-        //tajan();
-        kosaraju();
+        parents = new int[V + 1];
+        isFinished = new boolean[V + 1];
+        for (int i = 1; i <= V; i++) {
+            if (parents[i] == 0) {
+                dfs(i);
+            }
+        }
 
         printResult();
-    }
-
-    private static void kosaraju() {
-        isVisit = new boolean[V + 1];
-        for (int i = 1; i <= V; i++) {
-            if (!isVisit[i]) {
-                dfsKosaraju(i);
-            }
-        }
-
-        Arrays.fill(isVisit, false);
-        while (!stack.isEmpty()) {
-            int node = stack.pop();
-            if (isVisit[node]) {
-                continue;
-            }
-
-            scc = new ArrayList<>();
-            reDfsKosaraju(node);
-            scc.sort(Comparator.naturalOrder());
-            scces.add(scc);
-        }
-    }
-
-    private static void dfsKosaraju(int x) {
-        isVisit[x] = true;
-        for (int next : links[x]) {
-            if (!isVisit[next]) {
-                dfsKosaraju(next);
-            }
-        }
-        stack.add(x);
-    }
-
-    private static void reDfsKosaraju(int x) {
-        isVisit[x] = true;
-        scc.add(x);
-        for (int next : reverseLinks[x]) {
-            if (!isVisit[next]) {
-                reDfsKosaraju(next);
-            }
-        }
     }
 
     private static void printResult() {
@@ -104,33 +62,23 @@ public class A2150 {
             sb.append("-1").append("\n");
         }
 
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
-    private static void tajan() {
-        parent = new int[V + 1];
-        isFinished = new boolean[V + 1];
-        for (int i = 1; i <= V; i++) {
-            if (parent[i] == 0) {
-                dfsTajan(i);
-            }
-        }
-    }
-
-    private static int dfsTajan(int x) {
-        parent[x] = ++id;
+    private static int dfs(int x) {
+        parents[x] = ++id;
         stack.add(x);
 
-        int p = parent[x];
+        int parent = parents[x];
         for (int next : links[x]) {
-            if (parent[next] == 0) { // 아직 미방문이면 탐색시작
-                p = Math.min(p, dfsTajan(next));
+            if (parents[next] == 0) { // 아직 미방문이면 탐색시작
+                parent = Math.min(parent, dfs(next));
             } else if (!isFinished[next]) { // 방문은 했으나 scc가 정해지지 않았다면 --> 자신과, 다음 노드 중 작은 부모값을 가짐
-                p = Math.min(p, parent[next]);
+                parent = Math.min(parent, parents[next]);
             }
         }
 
-        if (p == parent[x]) {
+        if (parent == parents[x]) {
             scc = new ArrayList<>();
             while (true) {
                 int node = stack.pop();
@@ -146,7 +94,7 @@ public class A2150 {
             scces.add(scc);
         }
 
-        return p;
+        return parent;
     }
 }
 
