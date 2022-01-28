@@ -42,17 +42,19 @@ public class A4196 {
 
             id = 0;
             parents = new int[N + 1];
-            groups = new int[N + 1];
-            inDegrees = new int[N + 1];
             isFinished = new boolean[N + 1];
             stack = new Stack();
             scces = new ArrayList<>();
+
+            groups = new int[N + 1];
+            inDegrees = new int[N + 1];
             for (int i = 1; i <= N; i++) {
                 if (!isFinished[i]) {
                     dfs(i);
                 }
             }
 
+            int sccSize = scces.size();
             for (int i = 1; i <= N; i++) {
                 for (int j : links[i]) {
                     if (groups[i] != groups[j]) {
@@ -62,7 +64,7 @@ public class A4196 {
             }
 
             int count = 0;
-            for (int i = 1; i <= scces.size(); i++) {
+            for (int i = 1; i <= sccSize; i++) {
                 if (inDegrees[i] == 0) {
                     count++;
                 }
