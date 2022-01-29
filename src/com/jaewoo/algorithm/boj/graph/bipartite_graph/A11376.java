@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.maximum_flow.bipartite_graph;
+package com.jaewoo.algorithm.boj.graph.bipartite_graph;
 
 import java.io.BufferedReader;
 import java.io.IOException;

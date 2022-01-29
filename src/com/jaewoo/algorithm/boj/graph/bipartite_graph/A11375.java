@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.maximum_flow.bipartite_graph;
+package com.jaewoo.algorithm.boj.graph.bipartite_graph;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,11 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class A11377 {
+public class A11375 {
 
     static int N;
     static int M;
-    static int K;
 
     static List<Integer>[] jobs;
     static boolean[] visit;
@@ -25,7 +24,6 @@ public class A11377 {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(st.nextToken());
 
         matchResult = new int[N + 1];
         jobs = new ArrayList[N + 1];
@@ -46,15 +44,6 @@ public class A11377 {
             Arrays.fill(visit, false);
             if (dfs(i)) {
                 count++;
-            }
-        }
-
-        int extra = 0;
-        for (int i = 1; i <= N && extra < K; i++) {
-            Arrays.fill(visit, false);
-            if (dfs(i)) {
-                count++;
-                extra++;
             }
         }
 
@@ -80,10 +69,10 @@ public class A11377 {
 }
 
 /* input
-5 5 1
-3 1 2 3
-3 1 2 3
-1 5
-1 5
-1 5
+5 5
+2 1 2
+1 1
+2 2 3
+3 3 4 5
+1 1
  */
