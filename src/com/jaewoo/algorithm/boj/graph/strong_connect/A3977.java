@@ -88,32 +88,36 @@ public class A3977 {
     }
 
     private static int dfs(int current) {
-        parents[current] = id++;
-        int parent = parents[current];
+        parents[current] = ++id;
         stack.add(current);
 
+        int result = parents[current];
         for (int next : links[current]) {
             if (parents[next] == 0) {
-                parent = Math.min(parent, dfs(next));
+                result = Math.min(result, dfs(next));
             } else if (!isFinished[next]) {
-                parent = Math.min(parent, parents[next]);
+                result = Math.min(result, parents[next]);
             }
         }
 
-        if (parents[current] == parent) {
+        if (parents[current] == result) {
             List<Integer> scc = new ArrayList();
             while (!stack.isEmpty()) {
                 int node = stack.pop();
                 isFinished[node] = true;
                 scc.add(node);
                 group[node] = strongConnectedList.size() + 1;
+
+                if (node == current) {
+                    break;
+                }
             }
 
             scc.sort(Comparator.naturalOrder());
             strongConnectedList.add(scc);
         }
 
-        return parent;
+        return result;
     }
 }
 
