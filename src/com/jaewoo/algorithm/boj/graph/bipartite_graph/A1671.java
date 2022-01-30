@@ -15,7 +15,7 @@ public class A1671 {
     static int[] velocity;
     static int[] brain;
     static List<Integer>[] links;
-    private static boolean[] visit;
+    private static boolean[] isVisit;
     private static int[] B;
 
     public static void main(String[] args) throws IOException {
@@ -54,14 +54,14 @@ public class A1671 {
         }
 
         int count = 0;
-        visit = new boolean[N + 1];
+        isVisit = new boolean[N + 1];
         for (int i = 1; i <= N; i++) {
-            Arrays.fill(visit, false);
+            Arrays.fill(isVisit, false);
             if (dfs(i)) {
                 count++;
             }
 
-            Arrays.fill(visit, false);
+            Arrays.fill(isVisit, false);
             if (dfs(i)) {
                 count++;
             }
@@ -72,11 +72,11 @@ public class A1671 {
 
     private static boolean dfs(int x) {
         for (int y : links[x]) {
-            if (visit[y]) {
+            if (isVisit[y]) {
                 continue;
             }
 
-            visit[y] = true;
+            isVisit[y] = true;
             if (B[y] == 0 || dfs(B[y])) {
                 B[y] = x;
                 return true;

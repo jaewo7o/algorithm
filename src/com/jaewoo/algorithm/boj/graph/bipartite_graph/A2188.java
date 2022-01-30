@@ -13,7 +13,7 @@ public class A2188 {
     static int N;
     static int M;
     static List<Integer> links[];
-    static boolean[] visit;
+    static boolean[] isVisit;
     static int[] matchB;
 
     public static void main(String[] args) throws IOException {
@@ -39,9 +39,9 @@ public class A2188 {
         }
 
         int count = 0;
-        visit = new boolean[N + 1];
+        isVisit = new boolean[N + 1];
         for (int i = 1; i <= N; i++) {
-            Arrays.fill(visit, false);
+            Arrays.fill(isVisit, false);
             if (dfs(i)) {
                 count++;
             }
@@ -54,11 +54,11 @@ public class A2188 {
     private static boolean dfs(int x) {
         for (int y : links[x]) {
             // 이미 처리한 축사는 제외
-            if (visit[y]) {
+            if (isVisit[y]) {
                 continue;
             }
 
-            visit[y] = true;
+            isVisit[y] = true;
             if (matchB[y] == 0 || dfs(matchB[y])) {
                 matchB[y] = x;
                 return true;
