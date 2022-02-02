@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.bellman_ford;
+package com.jaewoo.algorithm.boj.graph.spfa;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,50 +47,9 @@ public class A1865 {
                 }
             }
 
-            //System.out.println("Bellman Ford Output");
-            boolean cycle = bellmanFord(1);
-            printResult(cycle);
-
-            //System.out.println("SPFA Output");
-            //cycle = spfa(1);
-            //printResult(cycle);
+            boolean cycle = spfa(1);
+            System.out.println(cycle? "YES" : "NO");
         }
-    }
-
-
-    private static void printResult(boolean cycle) {
-        if (cycle) {
-            System.out.println("YES");
-        } else {
-            System.out.println("NO");
-        }
-    }
-
-    public static boolean bellmanFord(int start) {
-        Arrays.fill(dist, Integer.MAX_VALUE);
-
-        // 시작노드 초기화
-        dist[start] = 0;
-
-        // 전체 N 반복수행(모든 노드에 대해 최단 거리 계산)
-        int newDist;
-        for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
-                for (Link e : links[j]) {
-                    newDist = dist[j] + e.w;
-                    if (dist[j] != Integer.MAX_VALUE && dist[e.v] > newDist) {
-                        dist[e.v] = newDist;
-
-                        // 마지막 노드에서도 최적의 해가 존재하면 싸이클 존재함
-                        if (i == N) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     private static boolean spfa(int start) {
@@ -100,8 +59,8 @@ public class A1865 {
         Queue<Integer> q = new LinkedList<>();
         q.offer(start);
 
-        int[] cycle = new int[N + 1];
-        cycle[start]++;
+        int[] visit = new int[N + 1];
+        visit[start]++;
 
         while (!q.isEmpty()) {
             int now = q.poll();
@@ -112,12 +71,11 @@ public class A1865 {
 
                 if (dist[next] > nextCost) {
                     dist[next] = nextCost;
+                    q.offer(next);
 
-                    if (++cycle[next] >= N) {
+                    if (++visit[next] >= N) {
                         return true;
                     }
-
-                    q.offer(next);
                 }
             }
         }
