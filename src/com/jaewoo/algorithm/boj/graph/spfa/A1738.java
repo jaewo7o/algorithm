@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.bellman_ford;
+package com.jaewoo.algorithm.boj.graph.spfa;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ public class A1738 {
     static int M;
 
     static List<Edge>[] edges;
-    static int[] gold;
+    static int[] dist;
     static Queue<Integer> path;
 
     public static void main(String[] args) throws IOException {
@@ -23,13 +23,14 @@ public class A1738 {
         M = Integer.parseInt(st.nextToken());
 
         edges = new List[N + 1];
-        for (int n=1; n<=N; n++) {
+        for (int n = 1; n <= N; n++) {
             edges[n] = new ArrayList<>();
         }
 
-        gold = new int[N + 1];
+        dist = new int[N + 1];
+        Arrays.fill(dist, Integer.MIN_VALUE);
 
-        for (int m=1, u, v, w; m<=M; m++) {
+        for (int m = 1, u, v, w; m <= M; m++) {
             st = new StringTokenizer(br.readLine());
 
             u = Integer.parseInt(st.nextToken());
@@ -39,7 +40,7 @@ public class A1738 {
             edges[u].add(new Edge(v, w));
         }
 
-        boolean cycle = bellmanFord(1);
+        boolean cycle = spfa(1);
 
         if (cycle) {
             System.out.println("-1");
@@ -51,26 +52,30 @@ public class A1738 {
         }
     }
 
-    private static boolean bellmanFord(int start) {
-        Arrays.fill(gold, Integer.MIN_VALUE);
+    private static boolean spfa(int start) {
+        int[] visit = new int[N + 1];
+        Queue<Integer> q = new LinkedList<>();
+
         path = new LinkedList<>();
-        gold[start] = 0;
+
+        q.offer(start);
         path.offer(start);
+        dist[start] = 0;
+        visit[start]++;
 
-        int next, nextGold;
-        for (int i = 1; i <= N; i++) {
-            for (Edge edge : edges[i]) {
-                nextGold = gold[i] + edge.w;
-                next = edge.v;
+        while (!q.isEmpty()) {
+            int now = q.poll();
+            for (Edge edge : edges[now]) {
+                if (dist[edge.v] < dist[now] + edge.w) {
+                    dist[edge.v] = dist[now] + edge.w;
 
-                if (gold[next] < nextGold) {
-                    gold[next] = nextGold;
-
-                    if (!path.contains(next)) {
-                        path.offer(next);
+                    if (!path.contains(edge.v)) {
+                        path.offer(edge.v);
                     }
 
-                    if (i == N) {
+                    q.offer(edge.v);
+
+                    if (++visit[edge.v] >= N) {
                         return true;
                     }
                 }
