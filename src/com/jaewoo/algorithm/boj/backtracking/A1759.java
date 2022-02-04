@@ -1,31 +1,39 @@
 package com.jaewoo.algorithm.boj.backtracking;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class A1759 {
 
     private static int L;
     private static int C;
-    private static int[] chars;
+    private static char[] chars;
     private static int count;
     private static StringBuilder sb;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
-        L = sc.nextInt();
-        C = sc.nextInt();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line = br.readLine();
+        StringTokenizer token = new StringTokenizer(line);
+        L = Integer.parseInt(token.nextToken());
+        C = Integer.parseInt(token.nextToken());
 
-        chars = new int[C + 1];
+        chars = new char[C + 1];
+        token = new StringTokenizer(br.readLine());
         for (int i = 1; i <= C; i++) {
-            chars[i] = sc.next().charAt(0);
+            chars[i] = token.nextToken().charAt(0);
         }
         Arrays.sort(chars); // 알파벳이 증가하는 형식이니 배열을 정렬한다.
 
         sb = new StringBuilder();
         for (int i = 1; i <= C; i++) {
             count = 1;
-            dfs(i, (char)chars[i] + "");
+            dfs(i, chars[i] + "");
         }
 
         System.out.println(sb.toString());
@@ -41,7 +49,7 @@ public class A1759 {
 
         for (int i = x + 1; i <= C; i++) {
             count++;
-            dfs(i, letters + (char)chars[i]);
+            dfs(i, letters + chars[i]);
             count--;
         }
     }
@@ -59,10 +67,11 @@ public class A1759 {
             }
         }
 
-        if (vowelCount >= 1 && L - vowelCount >= 2) {
-            return true;
-        } else {
-            return false;
-        }
+        return vowelCount >= 1 && L - vowelCount >= 2;
     }
 }
+
+/* INPUT
+4 6
+a t c i s w
+ */

@@ -50,3 +50,7 @@ public class A9663 {
         return true;
     }
 }
+
+/* input
+8
+ */
