@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.basic.bfs;
+package com.jaewoo.algorithm.boj.basic.bfs.level2;
 
 import java.io.*;
 import java.util.*;
@@ -69,30 +69,13 @@ public class A1260 {
     }
 
     private static void dfs(List<Integer>[] links, int start, BufferedWriter bw) throws IOException {
-        Stack<Integer> stack = new Stack<>();
-        stack.push(Integer.valueOf(start));
 
         bw.write(start + " ");
         visit[start] = true;
 
-        boolean flag;
-        while (!stack.isEmpty()) {
-            int now = stack.peek();
-            flag = false;
-
-            for (int next : links[now]) {
-                if (!visit[next]) {
-                    bw.write(next + " ");
-                    visit[next] = true;
-
-                    stack.push(next);
-                    flag = true;
-                    break;
-                }
-            }
-
-            if (!flag) {
-                stack.pop();
+        for (int next : links[start]) {
+            if (!visit[next]) {
+                dfs(links, next, bw);
             }
         }
     }

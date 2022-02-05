@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.basic.bfs;
+package com.jaewoo.algorithm.boj.basic.bfs.level2;
 
 import java.io.BufferedReader;
 import java.io.IOException;

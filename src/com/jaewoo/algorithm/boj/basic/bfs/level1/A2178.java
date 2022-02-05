@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.basic.bfs;
+package com.jaewoo.algorithm.boj.basic.bfs.level1;
 
 import java.io.*;
 import java.util.LinkedList;

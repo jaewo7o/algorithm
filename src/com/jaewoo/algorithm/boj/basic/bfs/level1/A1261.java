@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.basic.bfs;
+package com.jaewoo.algorithm.boj.basic.bfs.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 public class A1261 {
 
     private static int[][] d;
-    private static boolean[][] v;
+    private static boolean[][] isVisit;
     private static int[][] map;
 
     private static int N;
@@ -26,7 +26,7 @@ public class A1261 {
         M = Integer.parseInt(st.nextToken());
 
         d = new int[M][N];
-        v = new boolean[M][N];
+        isVisit = new boolean[M][N];
         map = new int[M][N];
 
         for (int m=0; m<M; m++) {
@@ -46,14 +46,14 @@ public class A1261 {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(0, 0, 0));
 
-        v[0][0] = true;
+        isVisit[0][0] = true;
 
         while (!pq.isEmpty()) {
-            Edge currentEdge = pq.poll();
+            Edge current = pq.poll();
 
             for (int k=0, nextX, nextY; k<4; k++) {
-                nextX = currentEdge.getX() + dx[k];
-                nextY = currentEdge.getY() + dy[k];
+                nextX = current.x + dx[k];
+                nextY = current.y + dy[k];
 
                 // out of box 인 경우 skip
                 if (nextX < 0 || nextY < 0 || nextX >= M || nextY >= N) {
@@ -61,9 +61,9 @@ public class A1261 {
                 }
 
                 // 미방문 노드인 경우 거리 업데이트
-                if (!v[nextX][nextY]) {
-                    d[nextX][nextY] = Math.min(d[nextX][nextY], currentEdge.getWeight() + map[nextX][nextY]);
-                    v[nextX][nextY] = true;
+                if (!isVisit[nextX][nextY]) {
+                    d[nextX][nextY] = Math.min(d[nextX][nextY], current.w + map[nextX][nextY]);
+                    isVisit[nextX][nextY] = true;
                     pq.offer(new Edge(nextX, nextY, d[nextX][nextY]));
                 }
             }
@@ -71,31 +71,19 @@ public class A1261 {
     }
 
     private static class Edge implements Comparable<Edge> {
-        private int x;
-        private int y;
-        private int weight;
+        public int x;
+        public int y;
+        public int w;
 
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        public int getWeight() {
-            return weight;
-        }
-
-        public Edge(int x, int y, int weight) {
+        public Edge(int x, int y, int w) {
             this.x = x;
             this.y = y;
-            this.weight = weight;
+            this.w = w;
         }
 
         @Override
         public int compareTo(Edge o) {
-            return this.weight - o.weight;
+            return this.w - o.w;
         }
     }
 }
