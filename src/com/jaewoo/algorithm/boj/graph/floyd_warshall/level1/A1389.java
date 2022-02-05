@@ -1,20 +1,20 @@
-package com.jaewoo.algorithm.boj.graph.floyd_warshall;
+package com.jaewoo.algorithm.boj.graph.floyd_warshall.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class A1238 {
+public class A1389 {
 
-    /**
-     * Floyd_warshall or dijkstra로 문제 풀이 가능
+    /*
+        floydwarshal과 dfs/bfs로 문제 풀이가 가능
      */
 
     static int N;
     static int M;
-    static int X;
-    static int[][] dist;
+    static int[][] relation;
+
     static int INF = 100000;
 
     public static void main(String[] args) throws IOException {
@@ -23,40 +23,52 @@ public class A1238 {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        X = Integer.parseInt(st.nextToken());
 
-        dist = new int[N + 1][N + 1];
+        relation = new int[N + 1][N + 1];
         for (int i = 1; i <= N; i++) {
             for (int j = 1; j <= N; j++) {
-                dist[i][j] = INF;
+                // 자기자신과는 관계가 0으로 세팅
+                if (i != j) {
+                    relation[i][j] = INF;
+                }
             }
         }
 
-        for (int i = 1, s, e, d; i <= M; i++) {
+        for (int i = 1, s, e; i <= M; i++) {
             st = new StringTokenizer(br.readLine());
             s = Integer.parseInt(st.nextToken());
             e = Integer.parseInt(st.nextToken());
-            d = Integer.parseInt(st.nextToken());
 
-            dist[s][e] = d;
+            relation[s][e] = 1;
+            relation[e][s] = 1;
         }
 
         floyd();
 
-        int maxDistance = 0;
+        int minKebinBacon = INF;
+        int minPerson = 0;
+        int kebinBacon;
         for (int i = 1; i <= N; i++) {
-            maxDistance = Math.max(maxDistance, dist[X][i] + dist[i][X]);
+            kebinBacon = 0;
+            for (int j = 1; j <= N; j++) {
+                kebinBacon += relation[i][j];
+            }
+
+            if (kebinBacon < minKebinBacon) {
+                minKebinBacon = kebinBacon;
+                minPerson = i;
+            }
         }
 
-        System.out.println(maxDistance);
+        System.out.println(minPerson);
     }
 
     private static void floyd() {
         for (int k = 1; k <= N; k++) {
             for (int i = 1; i <= N; i++) {
                 for (int j = 1; j <= N; j++) {
-                    if (dist[i][j] > dist[i][k] + dist[k][j]) {
-                        dist[i][j] = dist[i][k] + dist[k][j];
+                    if (relation[i][j] > relation[i][k] + relation[k][j]) {
+                        relation[i][j] = relation[i][k] + relation[k][j];
                     }
                 }
             }
@@ -65,17 +77,11 @@ public class A1238 {
 }
 
 /* input
-4 8 2
-1 2 4
-1 3 2
-1 4 7
-2 1 1
-2 3 5
-3 1 2
-3 4 4
-4 2 3
- */
+5 5
+1 3
+1 4
+4 5
+4 3
+3 2
 
-/* output
-10
  */

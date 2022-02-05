@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.floyd_warshall;
+package com.jaewoo.algorithm.boj.graph.floyd_warshall.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;

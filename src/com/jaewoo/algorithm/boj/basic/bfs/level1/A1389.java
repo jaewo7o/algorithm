@@ -7,6 +7,10 @@ import java.util.*;
 
 public class A1389 {
 
+    /*
+        BFS OR Floyd Warshall 문제
+     */
+
     private static int N;
     private static int M;
     private static List<Integer>[] links;
