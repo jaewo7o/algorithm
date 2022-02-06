@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.basic.dfs;
+package com.jaewoo.algorithm.boj.basic.dfs.level2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
