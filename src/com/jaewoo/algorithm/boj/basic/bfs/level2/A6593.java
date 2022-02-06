@@ -17,7 +17,7 @@ public class A6593 {
     static int[] dc = {-1, 0, 1, 0, 0, 0};
     static int[] dr = {0, -1, 0, 1, 0, 0};
 
-    static char[][][] buildingMaps;
+    static char[][][] maps;
     static boolean[][][] visit;
     static Queue<Position> q;
 
@@ -35,7 +35,7 @@ public class A6593 {
                 break;
             }
 
-            buildingMaps = new char[L + 1][R + 1][C + 1];
+            maps = new char[L + 1][R + 1][C + 1];
             visit = new boolean[L + 1][R + 1][C + 1];
             q = new LinkedList();
 
@@ -44,14 +44,14 @@ public class A6593 {
                 for (int r = 1; r <= R; r++) {
                     String line = br.readLine();
                     for (int c = 1; c <= C; c++) {
-                        buildingMaps[l][r][c] = line.charAt(c - 1);
+                        maps[l][r][c] = line.charAt(c - 1);
 
-                        if (buildingMaps[l][r][c] == 'S') {
+                        if (maps[l][r][c] == 'S') {
                             q.offer(new Position(l, r, c, 0));
                             visit[l][r][c] = true;
                         }
 
-                        if (buildingMaps[l][r][c] == 'E') {
+                        if (maps[l][r][c] == 'E') {
                             end = new Position(l, r, c, 0);
                         }
                     }
@@ -82,22 +82,28 @@ public class A6593 {
                 nextRow = now.row + dr[i];
                 nextColumn = now.column + dc[i];
 
-                if (nextLevel >=1 && nextRow >=1 && nextColumn >=1 && nextLevel <= L && nextRow <= R && nextColumn <= C) {
+                // out of building
+                if (nextLevel < 1 || nextRow < 1 || nextColumn < 1 || nextLevel > L || nextRow > R || nextColumn > C) {
+                    continue;
+                }
 
-                    if (buildingMaps[nextLevel][nextRow][nextColumn] == '#') {
-                        continue;
+                // 벽이 있는 경우 이동 불가
+                if (maps[nextLevel][nextRow][nextColumn] == '#') {
+                    continue;
+                }
+
+                if (!visit[nextLevel][nextRow][nextColumn]) {
+                    timeSum = now.time + 1;
+
+                    // 도착점에 도달한 경우 경과 시간 반환
+                    if (end.level == nextLevel && end.row == nextRow && end.column == nextColumn) {
+                        return timeSum;
                     }
 
-                    if (!visit[nextLevel][nextRow][nextColumn]) {
-                        timeSum = now.time + 1;
-
-                        if (end.level == nextLevel && end.row == nextRow && end.column == nextColumn) {
-                            return timeSum;
-                        }
-
-                        q.offer(new Position(nextLevel, nextRow, nextColumn, timeSum));
-                        visit[nextLevel][nextRow][nextColumn] = true;
-                    }
+                    // 도착점에 도달하지 않은 경우 다음 위치 큐에 추가
+                    q.offer(new Position(nextLevel, nextRow, nextColumn, timeSum));
+                    // 큐에 담은 위치는 방문완료 표시
+                    visit[nextLevel][nextRow][nextColumn] = true;
                 }
             }
         }

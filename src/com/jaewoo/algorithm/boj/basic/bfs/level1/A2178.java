@@ -10,6 +10,7 @@ public class A2178 {
     static int N;
     static int M;
     static int[][] map;
+    static int[][] dist;
     static boolean[][] visit;
 
     static int[] dx = {0, 1, 0, -1};
@@ -24,16 +25,17 @@ public class A2178 {
         M = Integer.parseInt(st.nextToken());
 
         map = new int[N + 1][M + 1];
+        dist = new int[N + 1][M + 1];
         visit = new boolean[N + 1][M + 1];
-        for (int i=1; i<=N; i++) {
+        for (int i = 1; i <= N; i++) {
             String line = br.readLine();
-            for (int j=1; j<=M; j++) {
-                map[i][j] = line.charAt(j-1) - '0';
+            for (int j = 1; j <= M; j++) {
+                map[i][j] = line.charAt(j - 1) - '0';
             }
         }
 
         bfs(1, 1);
-        bw.write(map[N][M] + "\n");
+        bw.write(dist[N][M] + "\n");
         bw.flush();
         bw.close();
     }
@@ -41,13 +43,14 @@ public class A2178 {
     private static void bfs(int startX, int startY) {
         Queue<Point> q = new LinkedList<>();
         q.offer(new Point(startX, startY));
+        dist[startX][startY] = 1;
 
         Point now;
         Point next = new Point();
         while (!q.isEmpty()) {
             now = q.poll();
 
-            for (int i=0; i<4; i++) {
+            for (int i = 0; i < 4; i++) {
                 next.x = now.x + dx[i];
                 next.y = now.y + dy[i];
 
@@ -66,7 +69,7 @@ public class A2178 {
                     continue;
                 }
 
-                map[next.x][next.y] = map[now.x][now.y] + 1;
+                dist[next.x][next.y] = dist[now.x][now.y] + 1;
                 q.offer(new Point(next.x, next.y));
                 visit[next.x][next.y] = true;
             }

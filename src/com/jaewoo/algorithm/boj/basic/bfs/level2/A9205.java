@@ -35,15 +35,16 @@ public class A9205 {
 
             for (int i = 1; i <= N + 2; i++) {
                 for (int j = 1; j <= N + 2; j++) {
-                    if (i != j && getManhattanDistance(points.get(i-1), points.get(j-1)) <= 1000) {
+                    if (i != j && getManhattanDistance(points.get(i - 1), points.get(j - 1)) <= 1000) {
                         links[i].add(j);
+                        links[j].add(i);
                     }
                 }
             }
 
             bfs(1);
 
-            sb.append(isVisit[N + 2]? "happy" : "sad").append("\n");
+            sb.append(isVisit[N + 2] ? "happy" : "sad").append("\n");
         }
 
         System.out.println(sb);

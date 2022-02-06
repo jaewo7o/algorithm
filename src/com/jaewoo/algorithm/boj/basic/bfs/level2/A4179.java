@@ -28,9 +28,9 @@ public class A4179 {
         C = Integer.parseInt(st.nextToken());
 
         maps = new char[R + 1][C + 1];
-        for (int r=1; r<=R; r++) {
+        for (int r = 1; r <= R; r++) {
             String line = br.readLine();
-            for (int c=1; c<=C; c++) {
+            for (int c = 1; c <= C; c++) {
                 char value = line.charAt(c - 1);
                 maps[r][c] = value;
 
@@ -61,21 +61,17 @@ public class A4179 {
             }
         }
 
-        if (isEscape) {
-            System.out.println(time);
-        } else {
-            System.out.println("IMPOSSIBLE");
-        }
+        System.out.println(isEscape? time : "IMPOSSIBLE");
     }
 
     private static void spread(Queue<Point> q, char data) {
         boolean[][] visit = new boolean[R + 1][C + 1];
         int length = q.size();
 
-        for (int i=1; i<=length; i++) {
+        for (int i = 1; i <= length; i++) {
             Point p = q.poll();
 
-            for (int d=0; d<4; d++) {
+            for (int d = 0; d < 4; d++) {
                 int nr = p.r + dr[d];
                 int nc = p.c + dc[d];
 
@@ -92,7 +88,7 @@ public class A4179 {
                     continue;
                 }
 
-                if (maps[nr][nc] == '.') {
+                if (maps[nr][nc] == '.' || maps[nr][nc] == 'J') {
                     maps[nr][nc] = data;
                     q.offer(new Point(nr, nc));
                     visit[nr][nc] = true;
@@ -102,7 +98,7 @@ public class A4179 {
     }
 
     private static boolean isOut(int r, int c) {
-        if (r >= 1 && r<=R && c>=1 && c<=C) {
+        if (r >= 1 && r <= R && c >= 1 && c <= C) {
             return false;
         } else {
             return true;
