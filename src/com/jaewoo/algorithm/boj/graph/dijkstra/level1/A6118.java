@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.dijkstra;
+package com.jaewoo.algorithm.boj.graph.dijkstra.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;

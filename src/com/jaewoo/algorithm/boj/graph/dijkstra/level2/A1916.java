@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.dijkstra;
+package com.jaewoo.algorithm.boj.graph.dijkstra.level2;
 
 import java.io.*;
 import java.util.ArrayList;
