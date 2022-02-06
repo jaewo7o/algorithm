@@ -10,15 +10,13 @@ public class A11403 {
     private static int N;
 
     private static int map[][];
-    private static int result[][];
-    private static boolean visit[];
+    private static int visit[];
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
 
         map = new int[N + 1][N + 1];
-        result = new int[N + 1][N + 1];
         for (int i = 1; i <= N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
 
@@ -27,31 +25,34 @@ public class A11403 {
             }
         }
 
+        StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= N; i++) {
-            visit = new boolean[N + 1];
+            visit = new int[N + 1];
             dfs(i);
 
             for (int j = 1; j <= N; j++) {
-                if (visit[j]) {
-                    result[i][j] = 1;
-                }
+                sb.append(visit[j]).append(" ");
             }
+
+            sb.append("\n");
         }
 
-        for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
-                System.out.print(result[i][j] + " ");
-            }
-            System.out.print("\n");
-        }
+        System.out.println(sb);
     }
 
-    private static void dfs(int i) {
+    private static void dfs(int start) {
         for (int j = 1; j <= N; j++) {
-            if (map[i][j] == 1 && !visit[j]) {
-                visit[j] = true;
+            if (map[start][j] == 1 && visit[j] == 0) {
+                visit[j] = 1;
                 dfs(j);
             }
         }
     }
 }
+
+/* input
+3
+0 1 0
+0 0 1
+1 0 0
+ */

@@ -21,11 +21,11 @@ public class A11724 {
         M = Integer.parseInt(st.nextToken());
 
         links = new ArrayList[N + 1];
-        for (int i=1; i<=N; i++) {
+        for (int i = 1; i <= N; i++) {
             links[i] = new ArrayList<>();
         }
 
-        for (int i=1, s, e; i<=M; i++) {
+        for (int i = 1, s, e; i <= M; i++) {
             st = new StringTokenizer(br.readLine());
             s = Integer.parseInt(st.nextToken());
             e = Integer.parseInt(st.nextToken());
@@ -36,7 +36,7 @@ public class A11724 {
 
         int count = 0;
         visit = new boolean[N + 1];
-        for (int i=1; i<=N; i++) {
+        for (int i = 1; i <= N; i++) {
             if (!visit[i]) {
                 dfs(i);
                 count++;

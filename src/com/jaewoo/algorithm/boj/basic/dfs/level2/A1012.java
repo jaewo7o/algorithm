@@ -17,7 +17,7 @@ public class A1012 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         T = Integer.parseInt(br.readLine());
-        for (int t=1; t<=T; t++) {
+        for (int t = 1; t <= T; t++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             M = Integer.parseInt(st.nextToken());
             N = Integer.parseInt(st.nextToken());
@@ -25,7 +25,7 @@ public class A1012 {
 
             // initialize
             maps = new int[M + 1][N + 1];
-            for (int i=1, m, n; i<=K; i++) {
+            for (int i = 1, m, n; i <= K; i++) {
                 st = new StringTokenizer(br.readLine());
                 m = Integer.parseInt(st.nextToken());
                 n = Integer.parseInt(st.nextToken());
@@ -35,8 +35,8 @@ public class A1012 {
 
             // solve
             int count = 0;
-            for (int m=1; m<=M; m++) {
-                for (int n=1; n<=N; n++) {
+            for (int m = 1; m <= M; m++) {
+                for (int n = 1; n <= N; n++) {
                     if (maps[m][n] == 1) {
                         count++;
                         dfs(m, n);
@@ -53,7 +53,7 @@ public class A1012 {
         maps[m][n] = 0;
 
         int nm, nn;
-        for (int x=0; x<4; x++) {
+        for (int x = 0; x < 4; x++) {
             nm = m + dm[x];
             nn = n + dn[x];
 
