@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.bellman_ford;
+package com.jaewoo.algorithm.boj.graph.bellman_ford.level3;
 
 import java.io.BufferedReader;
 import java.io.IOException;

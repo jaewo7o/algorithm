@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.spfa;
+package com.jaewoo.algorithm.boj.graph.spfa.level2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
