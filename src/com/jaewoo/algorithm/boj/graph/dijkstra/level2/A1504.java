@@ -1,10 +1,7 @@
 package com.jaewoo.algorithm.boj.graph.dijkstra.level2;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class A1504 {
     static int N;
@@ -41,14 +38,16 @@ public class A1504 {
         pass1 = Integer.parseInt(st.nextToken());
         pass2 = Integer.parseInt(st.nextToken());
 
-        int dist1, dist2;
+        int dist1, dist2, distPass1Pass2;
+        distPass1Pass2 = dijkstra(linkEdges, pass1, pass2);
+
         dist1 = dijkstra(linkEdges, 1, pass1);
-        dist1 += dijkstra(linkEdges, pass1, pass2);
         dist1 += dijkstra(linkEdges, pass2, N);
+        dist1 += distPass1Pass2;
 
         dist2 = dijkstra(linkEdges, 1, pass2);
-        dist2 += dijkstra(linkEdges, pass2, pass1);
         dist2 += dijkstra(linkEdges, pass1, N);
+        dist2 += distPass1Pass2;
 
         if (dist1 >= INF && dist2 >= INF) {
             bw.write("-1\n");
@@ -62,9 +61,7 @@ public class A1504 {
 
     private static int dijkstra(List<Edge>[] linkEdges, int start, int end) {
         int[] dist = new int[N + 1];
-        for (int i=1; i<=N; i++) {
-            dist[i] = INF;
-        }
+        Arrays.fill(dist, INF);
 
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(start, 0));
