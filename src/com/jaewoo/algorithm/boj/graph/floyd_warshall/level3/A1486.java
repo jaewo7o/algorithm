@@ -15,6 +15,7 @@ public class A1486 {
     private static int M;
     private static int T;
     private static int D;
+    private static int MAX;
 
     private static int[][] map;
     private static int[][] dist;
@@ -22,7 +23,7 @@ public class A1486 {
     private static int[] dn = {0, 1, 0, -1};
     private static int[] dm = {1, 0, -1, 0};
 
-    private static int INF = 1000;
+    private static int INF = 100000;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -47,44 +48,69 @@ public class A1486 {
             }
         }
 
-        dist = new int[N * M][N * M];
-        int nextN, nextM, virtualN, virtualM;
-        for (int n = 1; n < N; n++) {
-            for (int m = 1; m < M; m++) {
+        MAX = N * M;
+        dist = new int[MAX][MAX];
+        for (int n = 0; n < MAX; n++) {
+            for (int m = 0; m < MAX; m++) {
+                if (n == m) {
+                    dist[n][m] = 0;
+                } else {
+                    dist[n][m] = INF;
+                }
+            }
+        }
+
+        int nextN, nextM;
+        int here, there;
+        for (int n = 0; n < N; n++) {
+            for (int m = 0; m < M; m++) {
+                here = n * M + m;
                 for (int i = 0; i < 4; i++) {
-                    nextM = n + dm[i];
-                    nextN = m + dn[i];
+                    nextN = n + dn[i];
+                    nextM = m + dm[i];
+
+                    there = nextN * M + nextM;
 
                     // out of box skip
                     if (nextN < 0 || nextM < 0 || nextN >= N || nextM >= M) {
                         continue;
                     }
 
-                    virtualN = nextN * m + nextN;
-                    virtualM = nextM * m + nextM;
-
                     // 높이차가 이동 가능하지 않으면 skip
                     int currentHeight = map[n][m];
                     int nextHeight = map[nextN][nextM];
                     if (Math.abs(currentHeight - nextHeight) > T) {
-                        dist[virtualN][virtualM] = INF;
-                    } else if (currentHeight > nextHeight) {
-                        dist[virtualN][virtualM] = 1;
+                        continue;
+                    }
+
+                    if (currentHeight >= nextHeight) {
+                        dist[here][there] = 1;
                     } else {
                         int diff = nextHeight - currentHeight;
-                        dist[virtualN][virtualM] = diff * diff;
+                        dist[here][there] = diff * diff;
                     }
                 }
             }
         }
 
         floydWarshall();
+
+
+        int maxValue = 0;
+        for (int i = 0; i < MAX; i++) {
+            if (dist[0][i] + dist[i][0] <= D) {
+                maxValue = Math.max(maxValue, map[i / M][ i % M]);
+            }
+        }
+
+        System.out.println("maxValue = " + maxValue);
     }
 
     private static void floydWarshall() {
-        for (int k = 0; k < M * N; k++) {
-            for (int n = 0; n < M * N; n++) {
-                for (int m = 0; m < M * N; m++) {
+
+        for (int k = 0; k < MAX; k++) {
+            for (int n = 0; n < MAX; n++) {
+                for (int m = 0; m < MAX; m++) {
                     if (dist[n][m] > dist[n][k] + dist[k][m]) {
                         dist[n][m] = dist[n][k] + dist[k][m];
                     }
