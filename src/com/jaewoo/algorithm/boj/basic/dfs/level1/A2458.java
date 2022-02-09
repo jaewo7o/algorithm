@@ -62,12 +62,11 @@ public class A2458 {
     }
 
     private static void dfs(List<Integer>[] links, int start) {
-        isVisit[start] = true;
-
         for (int next : links[start]) {
             if (!isVisit[next]) {
-                count++;
+                isVisit[next] = true;
                 dfs(links, next);
+                count++;
             }
         }
     }
