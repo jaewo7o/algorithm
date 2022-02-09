@@ -7,6 +7,10 @@ import java.util.StringTokenizer;
 
 public class A2458 {
 
+    /*
+        floyd-warshall or bfs/dfs 로 문제 풀이 가능
+     */
+
     static int N;
     static int M;
     static int[][] maps;
