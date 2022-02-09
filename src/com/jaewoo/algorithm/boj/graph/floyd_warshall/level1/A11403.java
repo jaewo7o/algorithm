@@ -6,6 +6,11 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class A11403 {
+
+    /*
+        floyd warshall or dfs로 문제 풀이 가능
+     */
+
     private static int N;
     private static int[][] maps;
 
