@@ -8,25 +8,24 @@ public class A4195 {
     static int V;
     static int M;
     static int[] parents;
-    static int[] numbers;
+    static int[] sizes;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         T = Integer.parseInt(br.readLine());
-        for (int t=1; t<=T; t++) {
+        for (int t = 1; t <= T; t++) {
             M = Integer.parseInt(br.readLine());
 
             int index = 0;
+            int nodeSize = 0;
             Map<String, Integer> member = new HashMap<>();
             Queue<Relation> q = new LinkedList<>();
             String a, b;
-            for (int i=1; i<=M; i++) {
+            for (int i = 1; i <= M; i++) {
                 StringTokenizer st = new StringTokenizer(br.readLine());
                 a = st.nextToken();
                 b = st.nextToken();
-                q.offer(new Relation(a, b));
 
                 if (!member.containsKey(a)) {
                     member.put(a, ++index);
@@ -35,37 +34,30 @@ public class A4195 {
                 if (!member.containsKey(b)) {
                     member.put(b, ++index);
                 }
+
+                q.offer(new Relation(member.get(a), member.get(b)));
             }
 
-            parents = new int[member.size() + 1];
-            numbers = new int[member.size() + 1];
-            for (int i=1; i<=member.size(); i++) {
+            nodeSize = member.size();
+            parents = new int[nodeSize + 1];
+            sizes = new int[nodeSize + 1];
+            for (int i = 1; i <= nodeSize; i++) {
                 parents[i] = i;
-                numbers[i] = 1;
+                sizes[i] = 1;
             }
 
             int p1, p2;
-            for (int i=1; i<=M; i++) {
+            for (int i = 1; i <= M; i++) {
                 Relation r = q.poll();
 
-                p1 = member.get(r.a);
-                p2 = member.get(r.b);
-
-                p1 = getParent(p1);
-                p2 = getParent(p2);
+                p1 = getParent(r.u);
+                p2 = getParent(r.v);
 
                 if (p1 != p2) {
-                    parents[p2] = p1;
-                    numbers[p1] += numbers[p2];
-                    numbers[p2] = 1;
-
-                    bw.write(numbers[p1] + "\n");
+                    System.out.println(union(p1, p2));
                 }
             }
         }
-
-        bw.flush();
-        bw.close();
     }
 
     private static int getParent(int s) {
@@ -77,21 +69,28 @@ public class A4195 {
         return parents[s];
     }
 
-    private static class Relation {
-        public String a;
-        public String b;
+    private static int union(int u, int v) {
+        int pu = getParent(u);
+        int pv = getParent(v);
 
-        public Relation(String a, String b) {
-            this.a = a;
-            this.b = b;
+        if (pu > pv) {
+            parents[u] = pv;
+            sizes[pv] += sizes[u];
+            return sizes[pv];
+        } else {
+            parents[v] = pu;
+            sizes[pu] += sizes[v];
+            return sizes[pu];
         }
+    }
 
-        @Override
-        public String toString() {
-            return "Relation{" +
-                    "a='" + a + '\'' +
-                    ", b='" + b + '\'' +
-                    '}';
+    private static class Relation {
+        public int u;
+        public int v;
+
+        public Relation(int u, int v) {
+            this.u = u;
+            this.v = v;
         }
     }
 }
