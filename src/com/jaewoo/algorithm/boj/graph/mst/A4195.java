@@ -5,7 +5,6 @@ import java.util.*;
 
 public class A4195 {
     static int T;
-    static int V;
     static int M;
     static int[] parents;
     static int[] sizes;
@@ -47,7 +46,8 @@ public class A4195 {
             }
 
             int p1, p2;
-            for (int i = 1; i <= M; i++) {
+            int count = 0;
+            while (count < nodeSize - 1) {
                 Relation r = q.poll();
 
                 p1 = getParent(r.u);
@@ -55,6 +55,7 @@ public class A4195 {
 
                 if (p1 != p2) {
                     System.out.println(union(p1, p2));
+                    count++;
                 }
             }
         }
