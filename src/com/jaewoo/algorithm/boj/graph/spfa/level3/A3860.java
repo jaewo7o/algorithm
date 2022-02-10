@@ -90,6 +90,16 @@ public class A3860 {
         return sb.append(w).append("-").append(h).toString();
     }
 
+    private static int[] getPosArray(String position) {
+        int[] pos = new int[2];
+        int index = 0;
+        for (String token : position.split("-")) {
+            pos[index++] = Integer.parseInt(token);
+        }
+
+        return pos;
+    }
+
     private static void searchPath() {
         for (int w = 0, nextW; w < W; w++) {
             for (int h = 0, nextH; h < H; h++) {
@@ -123,23 +133,30 @@ public class A3860 {
     }
 
     private static boolean spfa() {
-        Queue<Point> q = new LinkedList<>();
+        Queue<String> q = new LinkedList<>();
         dist[0][0] = 0;
         visit[0][0] = 1;
-        q.offer(new Point(0, 0));
+        q.offer(getPosition(0, 0));
 
-        Point current;
+        int[] pos;
+        int[] nextPos;
         int nextDist, nextW, nextH;
         while (!q.isEmpty()) {
-            current = q.poll();
-            for (Edge edge : paths.get(getPosition(current.w, current.h))) {
-                nextDist = dist[current.w][current.h] + edge.time;
+            pos = getPosArray(q.poll());
 
-                nextW = edge.p.w;
-                nextH = edge.p.h;
+            for (Edge edge : paths.get(getPosition(pos[0], pos[1]))) {
+                nextDist = dist[pos[0]][pos[1]] + edge.t;
+
+                nextPos = getPosArray(edge.p);
+                nextW = nextPos[0];
+                nextH = nextPos[1];
                 if (dist[nextW][nextH] > nextDist) {
                     dist[nextW][nextH] = nextDist;
-                    q.offer(new Point(nextW, nextH));
+
+                    String nextPosition = getPosition(nextW, nextH);
+                    if (!q.contains(nextPosition)) {
+                        q.offer(nextPosition);
+                    }
 
                     if (++visit[nextW][nextH] > W * H) {
                         return true;
@@ -151,48 +168,13 @@ public class A3860 {
         return false;
     }
 
-    public static class Point {
-        public int w;
-        public int h;
-
-        public Point(int w, int h) {
-            this.w = w;
-            this.h = h;
-        }
-    }
-
     public static class Edge {
-        public Point p;
-        public int time;
+        public String p;
+        public int t;
 
-        public Edge(int w, int h, int time) {
-            this.p = new Point(w, h);
-            this.time = time;
+        public Edge(int w, int h, int t) {
+            this.p = getPosition(w, h);
+            this.t = t;
         }
     }
 }
-
-/* INPUT
-3 3
-2
-2 1
-1 2
-0
-4 3
-2
-2 1
-3 1
-1
-3 0 2 2 0
-4 2
-0
-1
-2 0 1 0 -3
-0 0
- */
-
-/* OUTPUT
-Impossible
-4
-Never
- */
