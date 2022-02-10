@@ -16,7 +16,7 @@ public class A1865 {
     static int W;
 
     static int[] dist;
-    static List<Link>[] links;
+    static List<Link> links;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,10 +29,7 @@ public class A1865 {
             W = Integer.parseInt(st.nextToken());
 
             dist = new int[N + 1];
-            links = new List[N + 1];
-            for (int i = 1; i <= N; i++) {
-                links[i] = new ArrayList<>();
-            }
+            links = new ArrayList<>();
 
             for (int i = 1, u, v, w; i <= M + W; i++) {
                 st = new StringTokenizer(br.readLine());
@@ -41,19 +38,14 @@ public class A1865 {
                 w = Integer.parseInt(st.nextToken());
 
                 if (i <= M) {
-                    links[u].add(new Link(v, w));
+                    links.add(new Link(u, v, w));
                 } else {
-                    links[u].add(new Link(v, -w));
+                    links.add(new Link(u, v, -w));
                 }
             }
 
-            //System.out.println("Bellman Ford Output");
             boolean cycle = bellmanFord(1);
             printResult(cycle);
-
-            //System.out.println("SPFA Output");
-            //cycle = spfa(1);
-            //printResult(cycle);
         }
     }
 
@@ -75,49 +67,15 @@ public class A1865 {
         // 전체 N 반복수행(모든 노드에 대해 최단 거리 계산)
         int newDist;
         for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
-                for (Link e : links[j]) {
-                    newDist = dist[j] + e.w;
-                    if (dist[j] != Integer.MAX_VALUE && dist[e.v] > newDist) {
-                        dist[e.v] = newDist;
+            for (Link e : links) {
+                newDist = dist[e.u] + e.w;
+                if (dist[e.u] != Integer.MAX_VALUE && dist[e.v] > newDist) {
+                    dist[e.v] = newDist;
 
-                        // 마지막 노드에서도 최적의 해가 존재하면 싸이클 존재함
-                        if (i == N) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private static boolean spfa(int start) {
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        dist[start] = 0;
-
-        Queue<Integer> q = new LinkedList<>();
-        q.offer(start);
-
-        int[] cycle = new int[N + 1];
-        cycle[start]++;
-
-        while (!q.isEmpty()) {
-            int now = q.poll();
-
-            for (Link link : links[now]) {
-                int next = link.v;
-                int nextCost = dist[now] + link.w;
-
-                if (dist[next] > nextCost) {
-                    dist[next] = nextCost;
-
-                    if (++cycle[next] >= N) {
+                    // 마지막 노드에서도 최적의 해가 존재하면 싸이클 존재함
+                    if (i == N) {
                         return true;
                     }
-
-                    q.offer(next);
                 }
             }
         }
@@ -126,10 +84,12 @@ public class A1865 {
     }
 
     private static class Link {
+        public int u;
         public int v;
         public int w;
 
-        public Link(int v, int w) {
+        public Link(int u, int v, int w) {
+            this.u = u;
             this.v = v;
             this.w = w;
         }
