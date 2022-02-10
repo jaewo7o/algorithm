@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.mst;
+package com.jaewoo.algorithm.boj.graph.mst.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
