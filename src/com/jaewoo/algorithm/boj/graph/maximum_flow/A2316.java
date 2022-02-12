@@ -15,7 +15,6 @@ public class A2316 {
     private static List<Integer>[] links;
     private static int[][] flow;
     private static int[] prev;
-    private static boolean[] isVisit;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -27,7 +26,6 @@ public class A2316 {
         links = new List[N + 1];
         flow = new int[N + 1][N + 1];
         prev = new int[N + 1];
-        isVisit = new boolean[N + 1];
         for (int i = 1; i <= N; i++) {
             links[i] = new ArrayList<>();
         }
@@ -59,7 +57,7 @@ public class A2316 {
             while (!q.isEmpty()) {
                 int current = q.poll();
                 for (int next : links[current]) {
-                    if (flow[current][next] < 1 && prev[next] == -1 && !isVisit[next]) {
+                    if (flow[current][next] < 1 && prev[next] == -1) {
                         q.offer(next);
                         prev[next] = current;
 
@@ -82,11 +80,6 @@ public class A2316 {
             for (int i = end; i != start; i = prev[i] ) {
                 flow[prev[i]][i] += tempFlow;
                 flow[i][prev[i]] -= tempFlow;
-
-                // start & end는 중복방문 가능하도록 방문처리 없음
-                if (i != end) {
-                    isVisit[i] = true;
-                }
             }
 
             result += tempFlow;
