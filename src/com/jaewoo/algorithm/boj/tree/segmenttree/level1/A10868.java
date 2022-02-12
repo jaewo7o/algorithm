@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.tree.segmenttree;
+package com.jaewoo.algorithm.boj.tree.segmenttree.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,8 +25,10 @@ public class A10868 {
             numbers[i] = Integer.parseInt(token.nextToken());
         }
 
-        SegmentTree tree = new SegmentTree();
-        SegmentTree.Node node = tree.initNode(numbers, 1, N);
+        SegmentTree minTree = new SegmentTree("MIN");
+        SegmentTree maxTree = new SegmentTree("MAX");
+        SegmentTree.Node minNode = minTree.initNode(numbers, 1, N);
+        SegmentTree.Node maxNode = maxTree.initNode(numbers, 1, N);
 
         // Query
         for(int i = 0; i < M; i++) {
@@ -35,11 +37,23 @@ public class A10868 {
             int end = Integer.parseInt(token.nextToken());
 
             // Get Value For start(l), end(r)
-            System.out.println(tree.getValue(node, start, end));
+            int minValue = minTree.getValue(minNode, start, end);
+            int maxValue = maxTree.getValue(maxNode, start, end);
+            System.out.println(String.format("%d %d", minValue, maxValue));
         }
     }
 
-    static class SegmentTree {
+    public static class SegmentTree {
+        public String type = "";
+
+        SegmentTree(String type) {
+            if (type == null) {
+                this.type = "MIN";
+            } else {
+                this.type = type;
+            }
+        }
+
         public class Node {
             private int start;
             private int end;
@@ -67,23 +81,35 @@ public class A10868 {
             Node rootNode = new Node();
             rootNode.start = left;
             rootNode.end = right;
-            rootNode.value = Math.min(leftNode.value, rightNode.value);
+
+            if ("MAX".equals(type)) {
+                rootNode.value = Math.max(leftNode.value, rightNode.value);
+            } else {
+                rootNode.value = Math.min(leftNode.value, rightNode.value);
+            }
             rootNode.leftChild = leftNode;
             rootNode.rightChild = rightNode;
 
             return rootNode;
         }
 
-        public static int getValue(Node root, int l, int r) {
+        public int getValue(Node root, int l, int r) {
             if (root.start >= l && root.end <= r) {
                 return root.value;
             }
 
             if (root.start > r || root.end < l) {
-                return Integer.MAX_VALUE;
+                return "MAX".equals(type)? Integer.MIN_VALUE : Integer.MAX_VALUE;
             }
 
-            return Math.min(getValue(root.leftChild, l, r), getValue(root.rightChild, l, r));
+            int returnValue;
+            if ("MAX".equals(type)) {
+                returnValue = Math.max(getValue(root.leftChild, l, r), getValue(root.rightChild, l, r));
+            } else {
+                returnValue = Math.min(getValue(root.leftChild, l, r), getValue(root.rightChild, l, r));
+            }
+
+            return returnValue;
         }
     }
 }
