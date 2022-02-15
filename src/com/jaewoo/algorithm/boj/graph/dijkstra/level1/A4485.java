@@ -25,9 +25,9 @@ public class A4485 {
 
             maps = new int[N + 1][N + 1];
             resultMaps = new int[N + 1][N + 1];
-            for (int i=1; i<=N; i++) {
+            for (int i = 1; i <= N; i++) {
                 StringTokenizer st = new StringTokenizer(br.readLine());
-                for (int j=1, w; j<=N; j++) {
+                for (int j = 1, w; j <= N; j++) {
                     w = Integer.parseInt(st.nextToken());
                     maps[i][j] = w;
                     resultMaps[i][j] = 10000;
@@ -46,7 +46,7 @@ public class A4485 {
         while (!q.isEmpty()) {
             Point p = q.poll();
 
-            for (int i=0, nextX, nextY; i<4; i++) {
+            for (int i = 0, nextX, nextY; i < 4; i++) {
                 nextX = p.x + dx[i];
                 nextY = p.y + dy[i];
 
@@ -64,7 +64,7 @@ public class A4485 {
         }
     }
 
-    private static class Point implements Comparable<Point>{
+    private static class Point implements Comparable<Point> {
         public int x;
         public int y;
         public int w;
