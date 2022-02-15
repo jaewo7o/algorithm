@@ -3,17 +3,16 @@ package com.jaewoo.algorithm.boj.graph.dijkstra.level2;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class A9370 {
 
-    public static final int INF = 10000;
     static int T;
     static int N;
     static int[] dist;
-    static int[][] maps;
+    static List<Edge>[] links;
+
+    static int[] target;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -32,45 +31,45 @@ public class A9370 {
             g = Integer.parseInt(st.nextToken());
             h = Integer.parseInt(st.nextToken());
 
-            maps = new int[N + 1][N + 1];
-            for (int i=1; i<=N; i++) {
-                Arrays.fill(maps[i], INF);
+            links = new List[N + 1];
+            for (int i = 1; i <= N; i++) {
+                links[i] = new ArrayList<>();
             }
 
+            boolean isMustPath;
             for (int i=1, u, v, w; i<=m; i++) {
                 st = new StringTokenizer(br.readLine());
                 u = Integer.parseInt(st.nextToken());
                 v = Integer.parseInt(st.nextToken());
                 w = Integer.parseInt(st.nextToken());
 
+                if ((u == g && v == h) || (u == h && v == g)) {
+                    isMustPath = true;
+                } else {
+                    isMustPath = false;
+                }
+
                 // 길의 weight를 2배처리해서 2의 배수로 만든다.
-                maps[u][v] = w * 2;
-                maps[v][u] = w * 2;
+                links[u].add(new Edge(v, isMustPath? w * 2 + 1 : w * 2));
+                links[v].add(new Edge(u, isMustPath? w * 2 + 1 : w * 2));
             }
 
-            // 통과해야 할 간선은 1을 빼서 2의 배수가 안되도록 변경한다.
-            maps[g][h] = maps[h][g] = maps[g][h] - 1;
-
-            int[] targets = new int[ t + 1 ];
-            for (int i=1; i<=t; i++) {
-                targets[i] = Integer.parseInt(br.readLine());
+            target = new int[t + 1];
+            for (int i = 1; i <= t; i++) {
+                target[i] = Integer.parseInt(br.readLine());
             }
 
             dist = new int[N + 1];
-
-            Arrays.fill(dist, INF);
+            Arrays.fill(dist, Integer.MAX_VALUE);
 
             dijkstra(s);
 
-            Arrays.sort(targets);
-            for (int i=1; i<=t; i++) {
-                // 도착 거리가 2의 배수가 아니라면 간선을 거친 경우로 판단하고 결과를 출력한다.
-                if (dist[targets[i]] % 2 == 1) {
-                    System.out.print(targets[i] + " ");
+            Arrays.sort(target);
+            for (int i = 1; i <= t; i++) {
+                if (dist[target[i]] % 2 != 0) {
+                    System.out.print(target[i] + " ");
                 }
             }
-
-            System.out.print("\n");
         }
     }
 
@@ -82,15 +81,26 @@ public class A9370 {
         while(!pq.isEmpty()) {
             int now = pq.poll();
 
-            for (int j=1; j<=N; j++) {
-                int nextWeight = dist[now] + maps[now][j];
-                if (dist[j] > nextWeight) {
-                    dist[j] = nextWeight;
-                    pq.offer(j);
+            for (Edge edge : links[now]) {
+                int next = edge.e;
+                int nextWeight = dist[now] + edge.w;
+                if (dist[next] > nextWeight) {
+                    dist[next] = nextWeight;
+                    pq.offer(next);
                 }
             }
         }
 
+    }
+
+    public static class Edge {
+        public int e;
+        public int w;
+
+        public Edge(int e, int w) {
+            this.e = e;
+            this.w = w;
+        }
     }
 }
 
