@@ -51,7 +51,7 @@ public class A5719 {
                 v = Integer.parseInt(st.nextToken());
                 w = Integer.parseInt(st.nextToken());
 
-                edges[u].add(new Edge(u, v, w));
+                edges[u].add(new Edge(v, w));
             }
 
             dist = new int[N];
@@ -83,41 +83,42 @@ public class A5719 {
             int now = q.poll();
 
             for (Edge edge : shortestPaths[now]) {
-                if (dist[edge.v] == dist[edge.u] + edge.w) {
-                    edges[edge.u].removeIf(x -> edge.v == x.v);
-                    q.offer(edge.u);
+                int next = edge.e;
+                if (dist[now] == dist[next] + edge.w) {
+                    edges[next].removeIf(x -> now == x.e);
+                    q.offer(next);
                 }
             }
         }
     }
 
     private static void dijkstra(int start) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        pq.offer(start);
-
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        pq.offer(new Edge(start, 0));
         dist[start] = 0;
+
+        int now, next, nextDist;
         while (!pq.isEmpty()) {
-            int now = pq.poll();
+            now = pq.poll().e;
 
             for (Edge edge : edges[now]) {
-                int nextDistance = dist[now] + edge.w;
-                if (dist[edge.v] >= nextDistance) {
-                    dist[edge.v] = nextDistance;
-                    pq.offer(edge.v);
-                    shortestPaths[edge.v].add(edge);
+                next = edge.e;
+                nextDist = dist[now] + edge.w;
+                if (dist[next] >= nextDist) {
+                    dist[next] = nextDist;
+                    pq.offer(edge);
+                    shortestPaths[next].add(new Edge(now, edge.w));
                 }
             }
         }
     }
 
     private static class Edge implements Comparable<Edge> {
-        public int u;
-        public int v;
+        public int e;
         public int w;
 
-        public Edge(int u, int v, int w) {
-            this.u = u;
-            this.v = v;
+        public Edge(int e, int w) {
+            this.e = e;
             this.w = w;
         }
 
