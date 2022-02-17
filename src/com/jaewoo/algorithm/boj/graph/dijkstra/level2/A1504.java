@@ -7,7 +7,7 @@ public class A1504 {
     static int N;
     static int E;
 
-    static final int INF = 100000;
+    static final int INF = 200000000;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -38,16 +38,15 @@ public class A1504 {
         pass1 = Integer.parseInt(st.nextToken());
         pass2 = Integer.parseInt(st.nextToken());
 
-        int dist1, dist2, distPass1Pass2;
-        distPass1Pass2 = dijkstra(linkEdges, pass1, pass2);
-
-        dist1 = dijkstra(linkEdges, 1, pass1);
+        int dist1 = 0;
+        dist1 += dijkstra(linkEdges, 1, pass1);
+        dist1 += dijkstra(linkEdges, pass1, pass2);
         dist1 += dijkstra(linkEdges, pass2, N);
-        dist1 += distPass1Pass2;
 
-        dist2 = dijkstra(linkEdges, 1, pass2);
+        int dist2 = 0;
+        dist2 += dijkstra(linkEdges, 1, pass2);
+        dist2 += dijkstra(linkEdges, pass2, pass1);
         dist2 += dijkstra(linkEdges, pass1, N);
-        dist2 += distPass1Pass2;
 
         if (dist1 >= INF && dist2 >= INF) {
             bw.write("-1\n");
@@ -61,23 +60,36 @@ public class A1504 {
 
     private static int dijkstra(List<Edge>[] linkEdges, int start, int end) {
         int[] dist = new int[N + 1];
+        boolean[] isVisit = new boolean[N + 1];
         Arrays.fill(dist, INF);
 
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(start, 0));
         dist[start] = 0;
 
-        int now, next, nextDistance;
+        int now, next, nextDist;
         while(!pq.isEmpty()) {
-            now = pq.poll().end;
+            Edge edge = pq.poll();
 
-            for (Edge nextEdge : linkEdges[now]) {
-                next = nextEdge.end;
-                nextDistance = dist[now] + nextEdge.weight;
+            now = edge.end;
+            if (dist[now] < edge.dist) {
+                continue;
+            }
 
-                if (nextDistance < dist[next]) {
-                    dist[next] = nextDistance;
-                    pq.offer(nextEdge);
+            if (now == end) {
+                break;
+            }
+
+            if (!isVisit[now]) {
+                isVisit[now] = true;
+                for (Edge nextEdge : linkEdges[now]) {
+                    next = nextEdge.end;
+                    nextDist = dist[now] + nextEdge.dist;
+
+                    if (nextDist < dist[next] && !isVisit[next]) {
+                        dist[next] = nextDist;
+                        pq.offer(new Edge(next, nextDist));
+                    }
                 }
             }
         }
@@ -87,16 +99,16 @@ public class A1504 {
 
     private static class Edge implements Comparable<Edge> {
         public int end;
-        public int weight;
+        public int dist;
 
-        public Edge(int end, int weight) {
+        public Edge(int end, int dist) {
             this.end = end;
-            this.weight = weight;
+            this.dist = dist;
         }
 
         @Override
         public int compareTo(Edge edge) {
-            return this.weight - edge.weight;
+            return this.dist - edge.dist;
         }
     }
 }

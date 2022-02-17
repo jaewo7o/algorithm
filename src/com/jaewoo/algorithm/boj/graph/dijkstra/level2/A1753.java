@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class A1753 {
     static int V;
@@ -26,10 +23,8 @@ public class A1753 {
 
         S = Integer.parseInt(br.readLine());
 
-        dist = new int[V + 1];
         List<Edge>[] linkEdges = new ArrayList[V + 1];
         for (int i = 1; i <= V; i++) {
-            dist[i] = Integer.MAX_VALUE;
             linkEdges[i] = new ArrayList<>();
         }
 
@@ -58,20 +53,31 @@ public class A1753 {
     }
 
     private static void dijkstra(List<Edge>[] linkEdges, int start) {
+        dist = new int[V + 1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+        boolean[] isVisit = new boolean[V + 1];
+
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(start, 0));
         dist[start] = 0;
 
-        int now, next, nextDistance;
+        int now, next, nextDist;
         while (!pq.isEmpty()) {
-            now = pq.poll().getEnd();
+            Edge edge = pq.poll();
 
+            now = edge.end;
+            if (isVisit[now]) {
+                continue;
+            }
+
+            isVisit[now] = true;
             for (Edge nextEdge : linkEdges[now]) {
-                next = nextEdge.getEnd();
-                nextDistance = dist[now] + nextEdge.getWeight();
-                if (nextDistance < dist[next]) {
-                    dist[next] = nextDistance;
-                    pq.offer(nextEdge);
+                next = nextEdge.end;
+                nextDist = dist[now] + nextEdge.dist;
+                if (!isVisit[next] && nextDist < dist[next]) {
+                    dist[next] = nextDist;
+                    pq.offer(new Edge(next, nextDist));
                 }
             }
         }
@@ -79,23 +85,15 @@ public class A1753 {
 
     private static class Edge implements Comparable<Edge> {
         int end;
-        int weight;
+        int dist;
 
-        public Edge(int end, int weight) {
+        public Edge(int end, int dist) {
             this.end = end;
-            this.weight = weight;
-        }
-
-        public int getEnd() {
-            return end;
-        }
-
-        public int getWeight() {
-            return weight;
+            this.dist = dist;
         }
 
         public int compareTo(Edge o) {
-            return this.getWeight() - o.getWeight();
+            return this.dist - o.dist;
         }
     }
 }
