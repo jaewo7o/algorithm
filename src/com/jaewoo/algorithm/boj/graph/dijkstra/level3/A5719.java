@@ -5,15 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-
-/// 여기부터 시작
 public class A5719 {
 
     static int N;
     static int M;
-
-    static int S;
-    static int D;
 
     static List<Edge>[] edges;
     static List<Edge>[] shortestPaths;
@@ -34,8 +29,8 @@ public class A5719 {
             }
 
             st = new StringTokenizer(br.readLine());
-            S = Integer.parseInt(st.nextToken());
-            D = Integer.parseInt(st.nextToken());
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
 
             edges = new List[N];
             shortestPaths = new List[N];
@@ -55,22 +50,20 @@ public class A5719 {
             }
 
             dist = new int[N];
-            Arrays.fill(dist, Integer.MAX_VALUE);
 
             // 최단거리 계산
-            dijkstra(S);
+            dijkstra(s);
 
             // back trace 후 최단거리 삭제
-            removeShortestPath(D);
+            removeShortestPath(e);
 
             // 최단거리 재계산(거의 최단거리)
-            Arrays.fill(dist, Integer.MAX_VALUE);
-            dijkstra(S);
+            dijkstra(s);
 
-            if (dist[D] == Integer.MAX_VALUE) {
+            if (dist[e] == Integer.MAX_VALUE) {
                 System.out.println("-1");
             } else {
-                System.out.println(dist[D]);
+                System.out.println(dist[e]);
             }
         }
     }
@@ -82,9 +75,9 @@ public class A5719 {
         while (!q.isEmpty()) {
             int now = q.poll();
 
-            for (Edge edge : shortestPaths[now]) {
-                int next = edge.e;
-                if (dist[now] == dist[next] + edge.w) {
+            for (Edge nextEdge : shortestPaths[now]) {
+                int next = nextEdge.e;
+                if (dist[now] == dist[next] + nextEdge.w) {
                     edges[next].removeIf(x -> now == x.e);
                     q.offer(next);
                 }
@@ -93,21 +86,32 @@ public class A5719 {
     }
 
     private static void dijkstra(int start) {
+        boolean[] isVisit = new boolean[N];
+
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(start, 0));
         dist[start] = 0;
 
         int now, next, nextDist;
         while (!pq.isEmpty()) {
-            now = pq.poll().e;
+            Edge edge = pq.poll();
 
-            for (Edge edge : edges[now]) {
-                next = edge.e;
-                nextDist = dist[now] + edge.w;
-                if (dist[next] >= nextDist) {
+            now = edge.e;
+            if (isVisit[now]) {
+                continue;
+            }
+
+            isVisit[now] = true;
+
+            for (Edge nextEdge : edges[now]) {
+                next = nextEdge.e;
+                nextDist = dist[now] + nextEdge.w;
+                if (!isVisit[next] && dist[next] >= nextDist) {
                     dist[next] = nextDist;
-                    pq.offer(edge);
-                    shortestPaths[next].add(new Edge(now, edge.w));
+                    pq.offer(new Edge(next, nextDist));
+                    shortestPaths[next].add(new Edge(now, nextEdge.w));
                 }
             }
         }
