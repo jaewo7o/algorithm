@@ -11,7 +11,6 @@ public class A1916 {
     static int M;
 
     static int[] cost;
-    static boolean[] visit;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,7 +20,6 @@ public class A1916 {
         M = Integer.parseInt(br.readLine());
 
         cost = new int[N + 1];
-        visit = new boolean[N + 1];
         List<Edge>[] linkEdge = new ArrayList[N + 1];
         for (int i=1; i<=N; i++) {
             cost[i] = Integer.MAX_VALUE;
@@ -50,28 +48,36 @@ public class A1916 {
     }
 
     private static void dijkstra(List<Edge>[] linkEdge, int s) {
+        boolean[] isVisit = new boolean[N + 1];
+
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(s, 0));
         cost[s] = 0;
 
         int now, next, nextCost;
         while(!pq.isEmpty()) {
-            now = pq.poll().getEnd();
+            Edge edge = pq.poll();
+            now = edge.end;
+            if (isVisit[now]) {
+                continue;
+            }
+
+            isVisit[now] = true;
 
             for (Edge nextNode : linkEdge[now]) {
-                next = nextNode.getEnd();
-                nextCost = cost[now] + nextNode.getCost();
-                if (nextCost < cost[next]) {
+                next = nextNode.end;
+                nextCost = cost[now] + nextNode.cost;
+                if (!isVisit[next] && nextCost < cost[next]) {
                     cost[next] = nextCost;
-                    pq.offer(nextNode);
+                    pq.offer(new Edge(next, nextCost));
                 }
             }
         }
     }
 
     private static class Edge implements Comparable<Edge> {
-        private int end;
-        private int cost;
+        public int end;
+        public int cost;
 
         public Edge(int end, int weight) {
             this.end = end;
@@ -81,14 +87,6 @@ public class A1916 {
         @Override
         public int compareTo(Edge edge) {
             return this.cost - edge.cost;
-        }
-
-        public int getEnd() {
-            return end;
-        }
-
-        public int getCost() {
-            return cost;
         }
     }
 }

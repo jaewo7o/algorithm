@@ -3,14 +3,17 @@ package com.jaewoo.algorithm.boj.graph.dijkstra.level2;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
 
 public class A9370 {
 
     static int T;
     static int N;
     static int[] dist;
-    static List<Edge>[] links;
+
+    static int[][] map;
 
     static int[] target;
 
@@ -31,28 +34,21 @@ public class A9370 {
             g = Integer.parseInt(st.nextToken());
             h = Integer.parseInt(st.nextToken());
 
-            links = new List[N + 1];
-            for (int i = 1; i <= N; i++) {
-                links[i] = new ArrayList<>();
+            map = new int[N + 1][N + 1];
+            for (int i = 0; i <= N; i++) {
+                Arrays.fill(map[i], Integer.MAX_VALUE);
             }
 
-            boolean isMustPath;
             for (int i=1, u, v, w; i<=m; i++) {
                 st = new StringTokenizer(br.readLine());
                 u = Integer.parseInt(st.nextToken());
                 v = Integer.parseInt(st.nextToken());
                 w = Integer.parseInt(st.nextToken());
 
-                if ((u == g && v == h) || (u == h && v == g)) {
-                    isMustPath = true;
-                } else {
-                    isMustPath = false;
-                }
-
-                // 길의 weight를 2배처리해서 2의 배수로 만든다.
-                links[u].add(new Edge(v, isMustPath? w * 2 + 1 : w * 2));
-                links[v].add(new Edge(u, isMustPath? w * 2 + 1 : w * 2));
+                map[u][v] = map[v][u] = w * 2;
             }
+
+            map[g][h] = map[h][g] = map[g][h] - 1;
 
             target = new int[t + 1];
             for (int i = 1; i <= t; i++) {
@@ -73,33 +69,47 @@ public class A9370 {
         }
     }
 
-    private static void dijkstra(int s) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        pq.offer(s);
-        dist[s] = 0;
+    private static void dijkstra(int start) {
+        boolean[] isVisit = new boolean[N + 1];
 
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        pq.offer(new Edge(start, 0));
+        dist[start] = 0;
+
+        int now;
         while(!pq.isEmpty()) {
-            int now = pq.poll();
+            Edge edge = pq.poll();
 
-            for (Edge edge : links[now]) {
-                int next = edge.e;
-                int nextWeight = dist[now] + edge.w;
-                if (dist[next] > nextWeight) {
-                    dist[next] = nextWeight;
-                    pq.offer(next);
+            now = edge.e;
+            if (isVisit[now]) {
+                continue;
+            }
+
+            isVisit[now] = true;
+
+            for (int next = 1; next <= N; next++) {
+                int nextDist = dist[now] + map[now][next];
+                if (!isVisit[next] && dist[next] > nextDist) {
+                    dist[next] = nextDist;
+                    pq.offer(new Edge(next, nextDist));
                 }
             }
         }
 
     }
 
-    public static class Edge {
+    public static class Edge implements Comparable<Edge> {
         public int e;
-        public int w;
+        public int d;
 
-        public Edge(int e, int w) {
+        public Edge(int e, int d) {
             this.e = e;
-            this.w = w;
+            this.d = d;
+        }
+
+        @Override
+        public int compareTo(Edge o) {
+            return this.d - o.d;
         }
     }
 }
@@ -112,6 +122,26 @@ public class A9370 {
 2 3 2
 3 4 4
 3 5 3
+5
+4
+6 9 2
+2 3 1
+1 2 1
+1 3 3
+2 4 4
+2 5 5
+3 4 3
+3 6 2
+4 5 4
+4 6 3
+5 6 7
+5
+6
+ */
+
+
+/*
+1
 5
 4
 6 9 2

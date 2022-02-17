@@ -36,7 +36,7 @@ public class A10282 {
                 s = Integer.parseInt(token.nextToken());
                 t = Integer.parseInt(token.nextToken());
 
-                links[s].add(new Edge(s, e, t));
+                links[s].add(new Edge(e, t));
             }
 
             dijkstra(C);
@@ -45,21 +45,31 @@ public class A10282 {
 
     private static void dijkstra(int start) {
         int[] dist = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            dist[i] = Integer.MAX_VALUE;
-        }
+        Arrays.fill(dist, Integer.MAX_VALUE);
 
+        boolean[] isVisit = new boolean[N + 1];
 
-        Queue<Integer> q = new LinkedList<>();
-        q.offer(start);
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        pq.offer(new Edge(start, 0));
         dist[start] = 0;
-        while (!q.isEmpty()) {
-            int current = q.poll();
-            for (Edge edge : links[current]) {
-                int nextDist = dist[current] + edge.time;
-                if (dist[edge.end] > nextDist) {
-                    dist[edge.end] = nextDist;
-                    q.offer(edge.end);
+
+        int now, next, nextDist;
+        while (!pq.isEmpty()) {
+            Edge edge = pq.poll();
+
+            now = edge.end;
+            if (isVisit[now]) {
+                continue;
+            }
+
+            isVisit[now] = true;
+
+            for (Edge nextEdge : links[now]) {
+                next = nextEdge.end;
+                nextDist = dist[now] + nextEdge.time;
+                if (!isVisit[next] && dist[next] > nextDist) {
+                    dist[next] = nextDist;
+                    pq.offer(new Edge(next, nextDist));
                 }
             }
         }
@@ -81,15 +91,18 @@ public class A10282 {
         System.out.println(nodes + " " + maxDist);
     }
 
-    private static class Edge {
-        public int start;
+    private static class Edge implements Comparable<Edge> {
         public int end;
         public int time;
 
-        public Edge(int start, int end, int time) {
-            this.start = start;
+        public Edge(int end, int time) {
             this.end = end;
             this.time = time;
+        }
+
+        @Override
+        public int compareTo(Edge o) {
+            return this.time - o.time;
         }
     }
 }
