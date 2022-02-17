@@ -65,11 +65,14 @@ public class A10217 {
         pq.offer(new Airport(start, 0, 0));
         times[start][0] = 0;
 
+        int curNode;
         while (!pq.isEmpty()) {
             Airport airport = pq.poll();
 
+            curNode = airport.node;
+
             // 마지막 공항에 도착하면 종료
-            if (airport.node == N) {
+            if (curNode == N) {
                 break;
             }
 
