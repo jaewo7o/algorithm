@@ -8,6 +8,10 @@ import java.util.StringTokenizer;
 
 public class A1261 {
 
+    /*
+        BFS라기 보다는 다익스트라 알고리즘에 더 맞을 것 같음
+     */
+
     private static int[][] d;
     private static boolean[][] isVisit;
     private static int[][] map;
@@ -29,29 +33,32 @@ public class A1261 {
         isVisit = new boolean[M][N];
         map = new int[M][N];
 
-        for (int m=0; m<M; m++) {
+        for (int m = 0; m < M; m++) {
             String line = br.readLine();
-            for (int n=0; n<N; n++) {
+            for (int n = 0; n < N; n++) {
                 d[m][n] = Integer.MAX_VALUE;
-                map[m][n] = Integer.parseInt(line.substring(n, n+1));
+                map[m][n] = Integer.parseInt(line.substring(n, n + 1));
             }
         }
 
-        bfs(map);
+        bfs();
 
-        System.out.println(d[M-1][N-1]);
+        System.out.println(d[M - 1][N - 1]);
     }
 
-    private static void bfs(int[][] m) {
+    private static void bfs() {
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         pq.offer(new Edge(0, 0, 0));
-
-        isVisit[0][0] = true;
 
         while (!pq.isEmpty()) {
             Edge current = pq.poll();
 
-            for (int k=0, nextX, nextY; k<4; k++) {
+            if (isVisit[current.x][current.y]) {
+                continue;
+            }
+            isVisit[current.x][current.y] = true;
+
+            for (int k = 0, nextX, nextY, nextDist; k < 4; k++) {
                 nextX = current.x + dx[k];
                 nextY = current.y + dy[k];
 
@@ -61,9 +68,9 @@ public class A1261 {
                 }
 
                 // 미방문 노드인 경우 거리 업데이트
-                if (!isVisit[nextX][nextY]) {
-                    d[nextX][nextY] = Math.min(d[nextX][nextY], current.w + map[nextX][nextY]);
-                    isVisit[nextX][nextY] = true;
+                nextDist = current.d + map[nextX][nextY];
+                if (!isVisit[nextX][nextY] && d[nextX][nextY] > nextDist) {
+                    d[nextX][nextY] = nextDist;
                     pq.offer(new Edge(nextX, nextY, d[nextX][nextY]));
                 }
             }
@@ -73,17 +80,17 @@ public class A1261 {
     private static class Edge implements Comparable<Edge> {
         public int x;
         public int y;
-        public int w;
+        public int d;
 
-        public Edge(int x, int y, int w) {
+        public Edge(int x, int y, int d) {
             this.x = x;
             this.y = y;
-            this.w = w;
+            this.d = d;
         }
 
         @Override
         public int compareTo(Edge o) {
-            return this.w - o.w;
+            return this.d - o.d;
         }
     }
 }
