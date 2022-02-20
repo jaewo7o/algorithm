@@ -6,14 +6,6 @@ import java.util.StringTokenizer;
 
 public class A2042 {
 
-    /*
-        알고리즘 설명 : https://blog.naver.com/PostView.nhn?blogId=sweetgirl0111&logNo=222276677369&parentCategoryNo=&categoryNo=&viewDate=&isShowPopularPosts=false&from=postView
-     */
-
-    private static long[] tree;
-
-    private static int startIndex;
-
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine().trim());
@@ -26,14 +18,8 @@ public class A2042 {
             numbers[i] = Long.parseLong(br.readLine());
         }
 
-        int depth = (int) Math.ceil(Math.log(N) / Math.log(2));
-        int treeN = (int) Math.pow(2, depth + 1) - 1;
-        startIndex = (int) Math.pow(2, depth);
-        tree = new long[treeN + 1];
-
-        for (int i = 1; i <= N; i++) {
-            updateTree(i, numbers[i]);
-        }
+        IndexTree tree = new IndexTree(numbers);
+        tree.makeTree();
 
         for (int i = 1; i <= M + K; i++) {
             st = new StringTokenizer(br.readLine().trim());
@@ -41,39 +27,87 @@ public class A2042 {
             int b = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
             if (a == 1) {
-                updateTree(b, c);
+                tree.update(b, c);
             } else
-                System.out.println(query(b, c));
+                System.out.println(tree.getSum(b, c));
         }
     }
 
-    private static long query(int start, int end) {
-        start = startIndex + start - 1;
-        end = startIndex + end - 1;
+    static class IndexTree {
+        private long[] numbers;
+        private long[] nodes;
+        private int height, leafCount;
 
-        long max = -1;
-        while (start <= end) {
-            if (start%2 == 1) {
-                max = Math.max(tree[start], max);
-            } else if (start%2 == 0) {
-                max = Math.max(tree[start], max);
+        IndexTree(long[] numbers) {
+            this.numbers = numbers;
+            int len = this.numbers.length - 1;
+
+            this.height = 0;
+            while (len != 0) {
+                len /= 2;
+                this.height++;
             }
 
-            start = (start + 1) / 2;
-            end = (end - 1) / 2;
+            this.leafCount = (int) Math.pow(2, height);
+            this.nodes = new long[(int) Math.pow(2, height + 1)];
         }
 
-        return max;
-    }
+        public void makeTree() {
+            makeSubTree(1, 1, leafCount);
+        }
 
-    private static void updateTree(int index, long number) {
-        index = startIndex + index - 1;
-        tree[index] = number;
+        private long makeSubTree(int node, int left, int right) {
+            if (left == right) {
+                if (left < numbers.length) {
+                    return this.nodes[node] = this.numbers[left];
+                } else {
+                    return this.nodes[node] = 0;
+                }
+            }
 
-        index = index / 2;
-        while (index > 0) {
-            tree[index] = tree[index * 2] + tree[index * 2 + 1];
-            index = index / 2;
+            int mid = (left + right) / 2;
+            this.nodes[node] = makeSubTree(2*node, left, mid);
+            this.nodes[node] += makeSubTree(2*node + 1, mid + 1, right);
+            return this.nodes[node];
+        }
+
+        public long getSum(int left, int right) {
+            return getSubSum(1, 1, leafCount, left, right);
+        }
+
+        private long getSubSum(int node, int left, int right, int tLeft, int tRight) {
+            if (tRight < left || tLeft > right) {
+                return 0L;
+            }
+
+            if (tLeft <= left  && right <= tRight) {
+                return this.nodes[node];
+            }
+
+            int mid = (left + right) / 2;
+            return getSubSum(node * 2, left, mid, tLeft, tRight)
+                    + getSubSum(node*2 + 1, mid + 1, right, tLeft, tRight );
+        }
+
+        public void update(int index, int value) {
+            subUpdate(1, 1, leafCount, index, value - numbers[index]);
+            this.numbers[index] = value;
+        }
+
+        private void subUpdate(int node, int left, int right, int index, long diff) {
+            if (index >= left && index <= right) {
+                this.nodes[node] += diff;
+
+                if (left == right) {
+                    return;
+                }
+            } else {
+                return;
+            }
+
+            int mid = (left + right) / 2;
+            subUpdate(node * 2, left, mid, index, diff);
+            subUpdate(node * 2 + 1, mid + 1, right, index, diff);
         }
     }
 }

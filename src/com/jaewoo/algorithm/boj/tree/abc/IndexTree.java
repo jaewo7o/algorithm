@@ -4,6 +4,7 @@ public class IndexTree {
 
     public static void main(String[] args) {
         int [] numbers = {0, 8, 3, 26, 1, 7, 24, 10};
+        //int [] numbers = {0, 1, 2, 3, 4, 5};
 
         Tree tree = new Tree(numbers);
 
@@ -25,7 +26,7 @@ public class IndexTree {
 
         Tree(int[] numbers) {
             this.numbers = numbers;
-            int length = numbers.length;
+            int length = numbers.length - 1;
 
             this.height = 0;
             while ( length != 0 ) {
@@ -33,8 +34,8 @@ public class IndexTree {
                 this.height++;
             }
 
-            this.leafCount = (int) Math.pow(2, this.height - 1);
-            this.nodes = new int[ (int) Math.pow(2, this.height) ];
+            this.leafCount = (int) Math.pow(2, this.height);
+            this.nodes = new int[ (int) Math.pow(2, this.height + 1) ];
         }
 
         public void makeTree() {
