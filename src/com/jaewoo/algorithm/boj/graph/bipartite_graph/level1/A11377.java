@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.bipartite_graph;
+package com.jaewoo.algorithm.boj.graph.bipartite_graph.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;

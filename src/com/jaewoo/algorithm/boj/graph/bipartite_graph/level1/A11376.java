@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.bipartite_graph;
+package com.jaewoo.algorithm.boj.graph.bipartite_graph.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class A11375 {
+public class A11376 {
 
     static int N;
     static int M;
@@ -40,10 +40,12 @@ public class A11375 {
         }
 
         int count = 0;
-        for (int i = 1; i <= N; i++) {
-            Arrays.fill(visit, false);
-            if (dfs(i)) {
-                count++;
+        for (int k = 1; k <= 2; k++) {
+            for (int i = 1; i <= N; i++) {
+                Arrays.fill(visit, false);
+                if (dfs(i)) {
+                    count++;
+                }
             }
         }
 
@@ -71,8 +73,8 @@ public class A11375 {
 /* input
 5 5
 2 1 2
-1 1
-2 2 3
-3 3 4 5
-1 1
+2 1 2
+2 1 2
+2 4 5
+0
  */
