@@ -10,7 +10,7 @@ public class A6118 {
     static int M;
 
     static int[] dist;
-    static List<Integer>[] edges;
+    static List<Edge>[] edges;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -30,8 +30,8 @@ public class A6118 {
             u = Integer.parseInt(st.nextToken());
             v = Integer.parseInt(st.nextToken());
 
-            edges[u].add(v);
-            edges[v].add(u);
+            edges[u].add(new Edge(v, 1));
+            edges[v].add(new Edge(u, 1));
         }
 
         Arrays.fill(dist, Integer.MAX_VALUE);
@@ -53,20 +53,39 @@ public class A6118 {
     }
 
     private static void dijkstra(int start) {
-        PriorityQueue<Integer> pq = new PriorityQueue();
-        pq.offer(start);
+        PriorityQueue<Edge> pq = new PriorityQueue();
+        pq.offer(new Edge(start, 0));
 
         dist[start] = 0;
+        int now;
+        int next, nextDist;
         while (!pq.isEmpty()) {
-            int now = pq.poll();
+            Edge edge = pq.poll();
+            now = edge.e;
 
-            for (int next : edges[now]) {
-                int nextDistance = dist[now] + 1;
-                if (dist[next] > nextDistance) {
-                    dist[next] = nextDistance;
-                    pq.offer(next);
+            for (Edge nextEdge : edges[now]) {
+                next = nextEdge.e;
+                nextDist = dist[now] + 1;
+                if (dist[next] > nextDist) {
+                    dist[next] = nextDist;
+                    pq.offer(new Edge(next, nextDist));
                 }
             }
+        }
+    }
+
+    private static class Edge implements Comparable<Edge> {
+        public int e;
+        public int d;
+
+        public Edge(int e, int d) {
+            this.e = e;
+            this.d = d;
+        }
+
+        @Override
+        public int compareTo(Edge o) {
+            return this.d - o.d;
         }
     }
 }
