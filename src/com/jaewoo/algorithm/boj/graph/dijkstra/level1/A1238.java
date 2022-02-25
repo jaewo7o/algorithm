@@ -73,16 +73,16 @@ public class A1238 {
         pq.offer(new Edge(start, 0));
         dist[start] = 0;
 
-        int now, next, nextDistance;
+        int now, next, nextDist;
         while (!pq.isEmpty()) {
             now = pq.poll().end;
 
             for (Edge nextEdge : linkEdges[now]) {
                 next = nextEdge.end;
-                nextDistance = dist[now] + nextEdge.weight;
-                if (nextDistance < dist[next]) {
-                    dist[next] = nextDistance;
-                    pq.offer(nextEdge);
+                nextDist = dist[now] + nextEdge.weight;
+                if (nextDist < dist[next]) {
+                    dist[next] = nextDist;
+                    pq.offer(new Edge(next, nextDist));
                 }
             }
         }
