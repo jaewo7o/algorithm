@@ -1,14 +1,11 @@
-package com.jaewoo.algorithm.boj.graph.topological_sort;
+package com.jaewoo.algorithm.boj.graph.topological_sort.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class A1766 {
+public class    A2252 {
 
     static int N;
     static int M;
@@ -22,49 +19,45 @@ public class A1766 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        links = new List[N + 1];
         indegree = new int[N + 1];
-
+        links = new List[N + 1];
         for (int i=1; i<=N; i++) {
-            links[i] = new ArrayList<>();
+            links[i] = new ArrayList();
         }
+
 
         for (int i=1, s, e; i<=M; i++) {
             st = new StringTokenizer(br.readLine());
             s = Integer.parseInt(st.nextToken());
             e = Integer.parseInt(st.nextToken());
-
             links[s].add(e);
+
             indegree[e]++;
         }
 
-        PriorityQueue<Integer> pq = new PriorityQueue();
+        Queue<Integer> q = new LinkedList();
         for (int i=1; i<=N; i++) {
             if (indegree[i] == 0) {
-                pq.offer(i);
+                q.offer(i);
             }
         }
 
-        StringBuilder sb = new StringBuilder();
-        int now;
-        while (!pq.isEmpty()) {
-            now = pq.poll();
-
-            sb.append(now).append(" ");
+        while (!q.isEmpty()) {
+            int now = q.poll();
+            System.out.println(now);
 
             for (int next : links[now]) {
-                if (--indegree[next] == 0) {
-                    pq.offer(next);
+                indegree[next]--;
+                if (indegree[next] == 0) {
+                    q.offer(next);
                 }
             }
         }
-
-        System.out.println(sb.toString());
     }
 }
 
 /* INPUT
-4 2
-4 2
-3 1
+3 2
+1 3
+2 3
  */

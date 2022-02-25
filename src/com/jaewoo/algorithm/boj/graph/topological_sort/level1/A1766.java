@@ -1,11 +1,14 @@
-package com.jaewoo.algorithm.boj.graph.topological_sort;
+package com.jaewoo.algorithm.boj.graph.topological_sort.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
 
-public class    A2252 {
+public class A1766 {
 
     static int N;
     static int M;
@@ -19,45 +22,49 @@ public class    A2252 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        indegree = new int[N + 1];
         links = new List[N + 1];
-        for (int i=1; i<=N; i++) {
-            links[i] = new ArrayList();
-        }
+        indegree = new int[N + 1];
 
+        for (int i=1; i<=N; i++) {
+            links[i] = new ArrayList<>();
+        }
 
         for (int i=1, s, e; i<=M; i++) {
             st = new StringTokenizer(br.readLine());
             s = Integer.parseInt(st.nextToken());
             e = Integer.parseInt(st.nextToken());
-            links[s].add(e);
 
+            links[s].add(e);
             indegree[e]++;
         }
 
-        Queue<Integer> q = new LinkedList();
+        PriorityQueue<Integer> pq = new PriorityQueue();
         for (int i=1; i<=N; i++) {
             if (indegree[i] == 0) {
-                q.offer(i);
+                pq.offer(i);
             }
         }
 
-        while (!q.isEmpty()) {
-            int now = q.poll();
-            System.out.println(now);
+        StringBuilder sb = new StringBuilder();
+        int now;
+        while (!pq.isEmpty()) {
+            now = pq.poll();
+
+            sb.append(now).append(" ");
 
             for (int next : links[now]) {
-                indegree[next]--;
-                if (indegree[next] == 0) {
-                    q.offer(next);
+                if (--indegree[next] == 0) {
+                    pq.offer(next);
                 }
             }
         }
+
+        System.out.println(sb.toString());
     }
 }
 
 /* INPUT
-3 2
-1 3
-2 3
+4 2
+4 2
+3 1
  */
