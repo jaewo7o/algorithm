@@ -34,12 +34,12 @@ public class A1516 {
 
             links[i] = new ArrayList<>();
             while (true) {
-                int target = Integer.parseInt(st.nextToken());
-                if (target == -1) {
+                int source = Integer.parseInt(st.nextToken());
+                if (source == -1) {
                     break;
                 }
 
-                links[target].add(i);
+                links[source].add(i);
                 inDegrees[i]++;
             }
         }

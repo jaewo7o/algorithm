@@ -45,7 +45,7 @@ public class A1948 {
         q.offer(start);
 
         while (!q.isEmpty()) {
-            int now = q.poll().intValue();
+            int now = q.poll();
 
             for (Edge e : links[now]) {
                 result[e.node] = Math.max(result[e.node], result[now] + e.time);
@@ -61,7 +61,7 @@ public class A1948 {
         boolean[] isVisit = new boolean[N + 1];
         int roadNumber = 0;
         while (!q.isEmpty()) {
-            int now = q.poll().intValue();
+            int now = q.poll();
 
             for (Edge e : reverseLinks[now]) {
                 if (result[now] - e.time == result[e.node]) {

@@ -59,7 +59,7 @@ public class A1766 {
             }
         }
 
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 }
 
