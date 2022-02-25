@@ -109,6 +109,7 @@ public class A5719 {
                 next = nextEdge.e;
                 nextDist = dist[now] + nextEdge.w;
                 if (!isVisit[next] && dist[next] >= nextDist) {
+                    System.out.println(String.format("now : %d, next : %d, oldDist : %d, newDist : %d", now, next, dist[next], nextDist));
                     dist[next] = nextDist;
                     pq.offer(new Edge(next, nextDist));
                     shortestPaths[next].add(new Edge(now, nextEdge.w));
