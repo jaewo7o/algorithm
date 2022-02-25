@@ -1,4 +1,4 @@
-package com.jaewoo.algorithm.boj.graph.maximum_flow;
+package com.jaewoo.algorithm.boj.graph.maximum_flow.level1;
 
 import java.io.BufferedReader;
 import java.io.IOException;

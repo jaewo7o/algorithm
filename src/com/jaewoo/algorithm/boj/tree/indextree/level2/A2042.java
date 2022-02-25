@@ -6,6 +6,10 @@ import java.util.StringTokenizer;
 
 public class A2042 {
 
+    /*
+    참고 알고리즘 : https://programming119.tistory.com/173
+     */
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine().trim());

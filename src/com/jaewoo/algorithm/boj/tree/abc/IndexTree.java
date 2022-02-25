@@ -3,7 +3,7 @@ package com.jaewoo.algorithm.boj.tree.abc;
 public class IndexTree {
 
     public static void main(String[] args) {
-        int [] numbers = {0, 8, 3, 26, 1, 7, 24, 10};
+        int[] numbers = {0, 8, 3, 26, 1, 7, 24, 10};
         //int [] numbers = {0, 1, 2, 3, 4, 5};
 
         Tree tree = new Tree(numbers);
@@ -29,13 +29,13 @@ public class IndexTree {
             int length = numbers.length - 1;
 
             this.height = 0;
-            while ( length != 0 ) {
+            while (length != 0) {
                 length /= 2;
                 this.height++;
             }
 
             this.leafCount = (int) Math.pow(2, this.height);
-            this.nodes = new int[ (int) Math.pow(2, this.height + 1) ];
+            this.nodes = new int[(int) Math.pow(2, this.height + 1)];
         }
 
         public void makeTree() {
@@ -52,8 +52,8 @@ public class IndexTree {
             }
 
             int mid = (left + right) / 2;
-            this.nodes[node] = makeSubTree(2*node, left, mid);
-            this.nodes[node] += makeSubTree(2*node + 1, mid + 1, right);
+            this.nodes[node] = makeSubTree(2 * node, left, mid);
+            this.nodes[node] += makeSubTree(2 * node + 1, mid + 1, right);
 
             return this.nodes[node];
         }
@@ -72,8 +72,8 @@ public class IndexTree {
             }
 
             int mid = (left + right) / 2;
-            return target(2*node, left, mid, tLeft, tRight) +
-                    target(2*node + 1, mid + 1, right, tLeft, tRight);
+            return target(2 * node, left, mid, tLeft, tRight) +
+                    target(2 * node + 1, mid + 1, right, tLeft, tRight);
         }
 
         public void update(int index, int value) {
@@ -81,20 +81,25 @@ public class IndexTree {
             this.numbers[index] = value;
         }
 
+        /*
+        tree height : 3
+        leaf count : 8
+        partial sum(1-3) : 37
+        after index 3 26 -> 0, partial sum(1-3) : 11
+         */
         private void subUpdate(int node, int left, int right, int index, int diff) {
-            if (left <= index && index <= right) {
-                this.nodes[node] += diff;
-
-                if (left == right) {
-                    return;
-                }
-            } else {
+            // index 범위 밖이면 업데이트 대상 아님
+            if (left > index || right < index) {
                 return;
             }
 
-            int mid = (left + right) / 2;
-            subUpdate(2*node, left, mid, index, diff);
-            subUpdate(2*node + 1, mid + 1, right, index, diff);
+            this.nodes[node] += diff;
+
+            if (left != right) {
+                int mid = (left + right) / 2;
+                subUpdate(2 * node, left, mid, index, diff);
+                subUpdate(2 * node + 1, mid + 1, right, index, diff);
+            }
         }
     }
 }
